@@ -40,10 +40,10 @@ export default function Sidebar() {
                   <button
                      onClick={() => toggleGroup(group.slug)}
                      className={clsx(
-                        "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[13px] font-bold tracking-wide uppercase transition-all duration-200 cursor-pointer group font-sans",
+                        "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[13px] font-bold tracking-wide transition-all duration-200 cursor-pointer group font-sans capitalize",
                         openGroups[group.slug]
-                           ? "text-foreground bg-muted font-black"
-                           : "text-foreground/65 hover:text-foreground/90 hover:bg-muted/40 font-black"
+                           ? "text-foreground/90 font-black"
+                           : "text-foreground/70 hover:text-foreground/90 hover:bg-muted/40 font-semibold"
                      )}
                   >
                      <span>{group.title}</span>
@@ -74,21 +74,23 @@ export default function Sidebar() {
                                     <Link
                                        key={page.slug}
                                        href={href}
-                                       className={clsx(
-                                          "block px-3 py-2 rounded-md text-[13px] transition-all duration-200 relative font-sans",
-                                          isActive
-                                             ? "text-primary bg-primary/15 font-black"
-                                             : "text-foreground/65 hover:text-foreground/95 hover:bg-muted/30"
-                                       )}
+                                       className="relative block px-2 py-1 font-sans group/link"
                                     >
                                        {isActive && (
                                           <motion.div
                                              layoutId="sidebar-active"
-                                             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[10.5px] w-[3px] h-4 bg-primary rounded-full"
+                                             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[8px] w-[3px] h-4 bg-primary rounded-full"
                                              transition={{ type: "spring", stiffness: 350, damping: 30 }}
                                           />
                                        )}
-                                       {page.title}
+                                       <span className={clsx(
+                                          "inline-block px-2 py-1 rounded-md text-[13px] transition-colors w-fit",
+                                          isActive
+                                             ? "text-primary bg-primary/10 font-bold"
+                                             : "text-foreground/70 group-hover/link:text-foreground group-hover/link:bg-muted/40 font-medium"
+                                       )}>
+                                          {page.title}
+                                       </span>
                                     </Link>
                                  );
                               })}

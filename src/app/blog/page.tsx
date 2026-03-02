@@ -1,21 +1,21 @@
-"use client";
+import { Metadata } from "next";
+import BlogHero from "@/src/components/blog/BlogHero";
+import RecentTutorials from "@/src/components/blog/RecentTutorials";
+import FeaturedProducts from "@/src/components/blog/FeaturedProducts";
+import TutorialList from "@/src/components/blog/TutorialList";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getFirstPage } from "@/src/lib/blogData";
+export const metadata: Metadata = {
+   title: "Tae7labs Dashboard",
+   description: "Explore my latest blog posts, tutorials, and alternative products.",
+};
 
 export default function BlogIndexPage() {
-   const router = useRouter();
-   const firstPage = getFirstPage();
-
-   useEffect(() => {
-      router.replace(firstPage);
-   }, [router, firstPage]);
-
    return (
-      <div className="flex items-center justify-center min-h-screen text-muted-foreground font-mono text-sm tracking-widest uppercase text-center bg-background">
-         <meta httpEquiv="refresh" content={`0; url=${firstPage}`} />
-         Directing to docs...
+      <div className="flex-1 min-w-0 bg-background overflow-y-auto custom-scrollbar">
+         <BlogHero />
+         <RecentTutorials />
+         <FeaturedProducts />
+         <TutorialList />
       </div>
    );
 }

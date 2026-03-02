@@ -22,9 +22,11 @@ const robotoSlab = Roboto_Slab({
   display: "swap",
 });
 
+import Navbar from "@/src/components/Navbar";
+
 export const metadata: Metadata = {
-  title: "VeeMeet Docs — Documentation",
-  description: "Explore beautifully crafted components and patterns by VeeMeet.",
+  title: "Tae7labs Dashboard",
+  description: "Explore beautifully crafted components and patterns by Tae7labs.",
 };
 
 export default function RootLayout({
@@ -32,8 +34,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${libreBaskerville.variable} ${robotoSlab.variable}`}>
-      <body className="antialiased">
-        <LenisProvider>{children}</LenisProvider>
+      <body className="antialiased font-sans">
+        <LenisProvider>
+          <Navbar />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );

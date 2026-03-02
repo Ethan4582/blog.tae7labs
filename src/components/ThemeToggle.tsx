@@ -27,29 +27,29 @@ export default function ThemeToggle() {
       <button
          onClick={toggleTheme}
          className={clsx(
-            "relative w-14 h-7 rounded-full p-1 transition-all duration-300 flex items-center cursor-pointer",
-            theme === "dark" ? "bg-primary/20" : "bg-muted"
+            "relative w-[56px] h-[30px] rounded-full p-1 transition-all duration-300 flex items-center cursor-pointer border shadow-inner",
+            theme === "dark"
+               ? "bg-primary/20 border-primary/30"
+               : "bg-black/10 border-black/10 hover:bg-black/15"
          )}
          aria-label="Toggle theme"
       >
          <motion.div
-            animate={{ x: theme === "dark" ? 28 : 0 }}
+            animate={{ x: theme === "dark" ? 26 : 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className={clsx(
-               "w-5 h-5 rounded-full flex items-center justify-center transition-colors shadow-sm",
-               theme === "dark" ? "bg-primary text-primary-foreground" : "bg-white text-foreground"
+               "w-[20px] h-[20px] rounded-full flex items-center justify-center transition-colors shadow-md border",
+               theme === "dark"
+                  ? "bg-primary text-primary-foreground border-transparent"
+                  : "bg-white text-foreground border-black/5"
             )}
          >
             {theme === "dark" ? (
                <Moon className="w-3 h-3" />
             ) : (
-               <Sun className="w-3 h-3" />
+               <Sun className="w-3 h-3 stroke-[2.5]" />
             )}
          </motion.div>
-         <div className="absolute inset-0 flex items-center justify-between px-2 text-[10px] uppercase font-bold pointer-events-none opacity-40">
-            <span className={clsx(theme === "dark" ? "opacity-100" : "opacity-0")}></span>
-            <span className={clsx(theme === "light" ? "opacity-100" : "opacity-0")}></span>
-         </div>
       </button>
    );
 }
