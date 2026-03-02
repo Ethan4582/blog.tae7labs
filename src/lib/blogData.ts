@@ -21,15 +21,6 @@ export const blogData: ToggleGroup[] = [
     slug: "getting-started",
     pages: [
       {
-        title: "Intro",
-        slug: "intro",
-        sections: [
-          { id: "overview", title: "Overview" },
-          { id: "installation", title: "Installation" },
-          { id: "quick-start", title: "Quick Start" },
-        ],
-      },
-      {
         title: "Gallery",
         slug: "gallery",
         sections: [
