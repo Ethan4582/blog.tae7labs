@@ -7,8 +7,8 @@ export const waterRippleData = {
    subtitle: "Rebuild a mesmerising water ripple effect that distorts text on hover.",
    introduction:
       "A tutorial rebuilding a mesmerizing water ripple effect that distorts text on hover, creating a fluid, organic interaction using Three.js, React, and custom GLSL shaders.",
-   liveDemo: "https://example.com/demo",
-   sourceCode: "https://github.com/yourname/ripple-effect",
+   liveDemo: "http://localhost:3001/gallery/water-ripple",
+   sourceCode: "https://github.com/Ethan4582/demo-t7block/blob/master/src/components/Water_Ripple/index.jsx",
    videoTutorial: "https://youtube.com/watch?v=dQw4w9WgXcQ",
    videoDemo: "https://www.youtube.com/embed/dQw4w9WgXcQ",
    sections: [
@@ -99,7 +99,8 @@ export default function RippleEffect() {
   const mouseRef = useRef(new THREE.Vector2(0, 0));
 
   useEffect(() => {
-    // Three.js setup will be added here
+  // we add the Three.js setup here
+   
   }, []);
 
   return (
@@ -107,20 +108,25 @@ export default function RippleEffect() {
       <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );
-}`,
+}
+`,
             },
             {
                type: "code",
                name: "components/RippleEffect/style.module.scss",
                language: "scss",
                code: `.container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none; // Allows interaction with elements behind if needed
+  width: 100%;
+  height: 100%;
   z-index: 1;
+  background-color: #000;
+  background-image: url('Your Image URL');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .canvas {
@@ -239,9 +245,9 @@ export const renderFragmentShader = \`
                type: "code",
                name: "components/RippleEffect/index.jsx (continued)",
                language: "jsx",
-               code: `  useEffect(() => {
-    const container = containerRef.current;
-    const canvas = canvasRef.current;
+               code: `
+  useEffect(() => {
+     const canvas = canvasRef.current;
 
     // Scene, camera, renderer
     const scene = new THREE.Scene();
@@ -282,9 +288,6 @@ export const renderFragmentShader = \`
         resolution: { value: new THREE.Vector2(width, height) },
         time: { value: 0 },
         frame: { value: 0 },
-        speed: { value: 0.5 },
-        damping: { value: 0.98 },
-        rippleStrength: { value: 0.5 },
       },
       vertexShader: simulationVertexShader,
       fragmentShader: simulationFragmentShader,
@@ -310,34 +313,86 @@ export const renderFragmentShader = \`
 
     // Create canvas for text texture
     const textCanvas = document.createElement('canvas');
+    let canvasWidth = window.innerWidth * window.devicePixelRatio;
+    let canvasHeight = window.innerHeight * window.devicePixelRatio;
+    textCanvas.width = canvasWidth;
+    textCanvas.height = canvasHeight;
     const ctx = textCanvas.getContext('2d', { alpha: true });
 
-    function updateTextCanvas() {
-      const w = window.innerWidth * window.devicePixelRatio;
-      const h = window.innerHeight * window.devicePixelRatio;
-      textCanvas.width = w;
-      textCanvas.height = h;
+    let fontSize = Math.round(250 * window.devicePixelRatio);
+    const textString = "Please Move the cursor over the text";
 
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#fef4b8'; // text color
-      ctx.font = \`bold \${250 * window.devicePixelRatio}px "Test Söhne", sans-serif\`;
+    function clearCanvas() {
+      ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+      ctx.fillStyle = "transparent";
+      ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
+    }
+
+    function drawTwoLineText() {
+      clearCanvas();
+      fontSize = Math.round(250 * window.devicePixelRatio);
+      const maxWidth = textCanvas.width * 0.9;
+
+      ctx.fillStyle = '#fef4b8';
+      ctx.font = \`bold \${fontSize}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif\`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      const text = 'Please Move the cursor over the text';
-      const words = text.split(' ');
-      
-      // Simple two-line split (you can enhance this)
-      const mid = Math.floor(words.length / 2);
-      const line1 = words.slice(0, mid).join(' ');
-      const line2 = words.slice(mid).join(' ');
-      const lineHeight = 250 * window.devicePixelRatio * 0.6;
+      const words = textString.split(' ');
+      let splitIndex = -1;
+      for (let offset = 0; offset <= Math.floor(words.length / 2); offset++) {
+        const mid = Math.floor(words.length / 2);
+        const iLeft = mid - offset;
+        const iRight = mid + offset;
+        const candidates = [];
+        if (iLeft > 0) candidates.push(iLeft);
+        if (iRight < words.length) candidates.push(iRight);
+        let found = false;
+        for (const idx of candidates) {
+          const line1 = words.slice(0, idx).join(' ');
+          const line2 = words.slice(idx).join(' ');
+          if (
+            ctx.measureText(line1).width <= maxWidth &&
+            ctx.measureText(line2).width <= maxWidth
+          ) {
+            splitIndex = idx;
+            found = true;
+            break;
+          }
+        }
+        if (found) break;
+      }
 
-      ctx.fillText(line1, w / 2, h / 2 - lineHeight / 2);
-      ctx.fillText(line2, w / 2, h / 2 + lineHeight / 2);
+      if (splitIndex === -1) {
+        let tempFont = fontSize;
+        while (tempFont > 10) {
+          ctx.font = \`bold \${tempFont}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif\`;
+          const idx = Math.floor(words.length / 2);
+          const line1 = words.slice(0, idx).join(' ');
+          const line2 = words.slice(idx).join(' ');
+          if (
+            ctx.measureText(line1).width <= maxWidth &&
+            ctx.measureText(line2).width <= maxWidth
+          ) {
+            fontSize = tempFont;
+            splitIndex = idx;
+            break;
+          }
+          tempFont = Math.floor(tempFont * 0.95);
+        }
+        if (splitIndex === -1) splitIndex = Math.floor(words.length / 2);
+        ctx.font = \`bold \${fontSize}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif\`;
+      }
+
+      const line1 = words.slice(0, splitIndex).join(' ');
+      const line2 = words.slice(splitIndex).join(' ');
+      const lineHeight = fontSize * 0.6;
+
+      ctx.fillText(line1, textCanvas.width / 2, textCanvas.height / 2 - lineHeight / 2);
+      ctx.fillText(line2, textCanvas.width / 2, textCanvas.height / 2 + lineHeight / 2);
     }
 
-    updateTextCanvas();
+    drawTwoLineText();
 
     const textTexture = new THREE.CanvasTexture(textCanvas);
     textTexture.minFilter = THREE.LinearFilter;
@@ -352,8 +407,9 @@ export const renderFragmentShader = \`
     const onMouseLeave = () => {
       mouse.set(0, 0);
     };
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseleave', onMouseLeave);
+
+    renderer.domElement.addEventListener('mousemove', onMouseMove);
+    renderer.domElement.addEventListener('mouseleave', onMouseLeave);
 
     // Resize handler
     const onResize = () => {
@@ -365,46 +421,54 @@ export const renderFragmentShader = \`
       rtB.setSize(newWidth, newHeight);
       simMaterial.uniforms.resolution.value.set(newWidth, newHeight);
 
-      updateTextCanvas();
+      textCanvas.width = newWidth;
+      textCanvas.height = newHeight;
+      drawTwoLineText();
       textTexture.needsUpdate = true;
     };
     window.addEventListener('resize', onResize);
 
     // Animation loop
     let frame = 0;
-    const animate = () => {
-      requestAnimationFrame(animate);
+    let animationFrameId;
 
+    const animate = () => {
       simMaterial.uniforms.frame.value = frame++;
       simMaterial.uniforms.time.value = performance.now() / 1000;
-      simMaterial.uniforms.textureA.value = rtA.texture;
 
-      // First pass: simulation
+      simMaterial.uniforms.textureA.value = rtA.texture;
       renderer.setRenderTarget(rtB);
       renderer.render(simScene, camera);
 
-      // Second pass: render with text
       renderMaterial.uniforms.textureA.value = rtB.texture;
       renderMaterial.uniforms.textureB.value = textTexture;
       renderer.setRenderTarget(null);
       renderer.render(scene, camera);
 
-      // Swap render targets
-      [rtA, rtB] = [rtB, rtA];
+      const temp = rtA;
+      rtA = rtB;
+      rtB = temp;
+
+      animationFrameId = requestAnimationFrame(animate);
     };
+
     animate();
 
     // Cleanup on unmount
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseleave', onMouseLeave);
+      renderer.domElement.removeEventListener('mousemove', onMouseMove);
+      renderer.domElement.removeEventListener('mouseleave', onMouseLeave);
       window.removeEventListener('resize', onResize);
+      cancelAnimationFrame(animationFrameId);
+
       renderer.dispose();
       rtA.dispose();
       rtB.dispose();
       textTexture.dispose();
     };
-  }, []);`,
+   
+  }, []);
+`,
             },
          ],
       },
@@ -508,7 +572,7 @@ export default function Home() {
             },
             {
                type: "paragraph",
-               text: "Special thanks to the original inspiration and the CodeGrid . Happy coding!",
+               text: "Special thanks to the original inspiration and the @CodeGrid[urlhttps://www.youtube.com/@codegrid] . Happy coding!",
             },
          ],
       },
