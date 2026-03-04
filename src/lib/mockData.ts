@@ -54,7 +54,19 @@ export const recentTutorials: Tutorial[] = [
       gif: assets.tutorials.waterRipple.gif,
       slug: "water-ripple-hover-effect"
    },
-   
+   {
+      id: "2",
+      title: "Loader Split Counter",
+      description: "Full-screen animated loading sequence with a rolling digit counter and expanding progress bars using GSAP.",
+      galleryDescription: "A high-end mechanical counter loading sequence for premium landing pages.",
+      demoInstructions: "Observe the counter roll to 100% while the bars fill up. The loader will automatically reveal the content.",
+      date: "March 5, 2026",
+      tag: "PAGE REVEAL",
+      category: "page-reveal",
+      image: assets.tutorials.loaderSplitCounter.image,
+      gif: assets.tutorials.loaderSplitCounter.gif,
+      slug: "loader-split-counter"
+   },
 ];
 
 export const featuredProducts: Product[] = [
@@ -117,7 +129,23 @@ export const blogNavigation: ToggleGroup[] = [
          },
       ],
    },
-   
+   {
+      title: "PAGE REVEAL",
+      slug: "page-reveal",
+      pages: [
+         {
+            title: "Loader Split Counter",
+            slug: "loader-split-counter",
+            date: "March 5, 2026",
+            sections: [
+               { id: "initializing-project", title: "Initializing the project" },
+               { id: "component-structure", title: "Component structure" },
+               { id: "counter-digit-arrays", title: "Preparing the counter digits" },
+               { id: "core-gsap-animations", title: "Core GSAP animations" },
+            ],
+         },
+      ],
+   },
 ];
 
 export function findPageBySlug(slugPath: string[]): { group: ToggleGroup; page: PageItem } | null {

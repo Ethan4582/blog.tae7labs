@@ -1,0 +1,134 @@
+.container {
+   position: relative;
+   width: 100%;
+   height: 100vh;
+   overflow: hidden;
+   background-color: #000;
+   font-family: var(--font-serif, serif);
+}
+
+.websiteContent {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   z-index: 1;
+}
+
+.revealedImage {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0.8;
+}
+
+.header {
+   position: relative;
+   z-index: 2;
+   overflow: hidden;
+}
+
+.h1Text {
+   font-size: clamp(3rem, 10vw, 8rem);
+   font-weight: 900;
+   color: #fff;
+   margin: 0;
+   transform: translateY(100%);
+   text-transform: uppercase;
+   letter-spacing: -0.02em;
+}
+
+.loadingScreen {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   z-index: 100;
+}
+
+.loadingImage {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0.5;
+}
+
+.loader {
+   position: relative;
+   width: 300px;
+   height: 4px;
+   background: rgba(255, 255, 255, 0.1);
+   margin-bottom: 40px;
+   z-index: 101;
+}
+
+.bar {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 100%;
+   background: #fff;
+}
+
+.loader1 {
+   width: 100%;
+   transform-origin: left;
+}
+
+.loader2 {
+   width: 100%;
+   transform-origin: left;
+}
+
+.counter {
+   display: flex;
+   gap: 0;
+   font-size: clamp(4rem, 15vw, 12rem);
+   font-weight: 900;
+   line-height: 1;
+   color: #fff;
+   height: 1em;
+   overflow: hidden;
+   z-index: 101;
+}
+
+.digit {
+   display: flex;
+   flex-direction: column;
+}
+
+.digit div {
+   height: 1em;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.num1offset {
+   margin-left: -0.1em;
+}
+
+.num1offset2 {
+   margin-left: -0.1em;
+}
+
+.websiteContent {
+   background: #0a0a0a;
+}

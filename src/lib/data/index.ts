@@ -7,12 +7,14 @@
  */
 
 import type { PostContent } from "../types";
-import { waterRippleData } from "./threejs/water-ripple.data";
+import { waterRippleData } from "./shader/water-ripple.data";
+import { loaderSplitCounterData } from "./page_reveal/loader_split_counter";
 
 export type { PostContent };
 
 export const tutorialsData: Record<string, PostContent> = {
    "water-ripple-hover-effect": waterRippleData,
+   "loader-split-counter": loaderSplitCounterData,
 };
 
 export function getTutorialData(slug: string): PostContent | null {

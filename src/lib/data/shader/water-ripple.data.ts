@@ -1,7 +1,7 @@
 import type { PostContent } from "../../types";
 import { assets } from "../../asset_data";
 
-export const waterRippleData = {
+export const waterRippleData: PostContent = {
   author: "SinghAshir65848",
   date: "March 3, 2026",
   difficulty: "Intermediate",
@@ -9,7 +9,7 @@ export const waterRippleData = {
   introduction:
     "A tutorial rebuilding a mesmerizing water ripple effect that distorts text on hover, creating a fluid, organic interaction using Three.js, React, and custom GLSL shaders.",
   liveDemo: "https://t7labs-demo.pages.dev/gallery/water-ripple",
-  sourceCode: "https://github.com/Ethan4582/demo-t7block/blob/master/src/components/Water_Ripple/index.jsx",
+  sourceCode: "https://github.com/Ethan4582/demo-t7labs/tree/master/src/components/Water_Ripple",
   gif: assets.tutorials.waterRipple.gif,
   sections: [
     {

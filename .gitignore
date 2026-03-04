@@ -17,7 +17,7 @@ notes.md
 # next.js
 /.next/
 /out/
-.agents
+
 # production
 /build
 
