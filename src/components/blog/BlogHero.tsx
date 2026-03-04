@@ -20,7 +20,7 @@ export default function BlogHero() {
             className="w-full"
          >
             <h1 className="text-xl md:text-2xl font-bold text-foreground/90 mb-8 tracking-tight leading-relaxed font-serif line-clamp-2 max-w-full">
-               Welcome to my blog <span className="inline-block scale-75 opacity-70">🔴</span> I'm Ashirvad and here I document my latest explorations.
+               Welcome to my blog <span className="inline-block scale-75 opacity-70">🔴</span> I'm Ashirwad and here I document my latest explorations.
             </h1>
 
             <div className="flex flex-wrap gap-3">

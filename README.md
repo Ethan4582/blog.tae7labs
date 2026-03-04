@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# demo-t7labs
 
-## Getting Started
+Hi Welcome to my blog. I published some design ,animation , Landing page Templete and many more things. 
 
-First, run the development server:
+![Demo](public/assets/image.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The project showcases custom components, layouts, and modern frontend techniques used in premium landing pages. It serves as a working laboratory for the techniques discussed in the blog.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> **Note:** These are not all original concepts. Many are inspired by high-end websites and creative developers in the community. Credits are provided in the respective blog posts.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 👨‍💻 Developer
 
-To learn more about Next.js, take a look at the following resources:
+- **Developed by:** [@Ethan4582](https://github.com/Ethan4582)
+- **Contact:** [@SinghAshir65848](https://x.com/SinghAshir65848)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ☕ Support the Creator
 
-## Deploy on Vercel
+If these tutorials helped you or inspired your work, consider supporting the maintenance of this project!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[Buy Me a Coffee](https://buymeacoffee.com/ashirwad05)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📜 License
+
+This project is open-source. Please provide proper credit to the developers and original inspirations when using this work.

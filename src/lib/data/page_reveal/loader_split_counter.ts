@@ -276,5 +276,15 @@ export default function RootLayout({ children }) {
             },
          ],
       },
+       {
+      id: "wrapping-up",
+      title: "Wrapping Up",
+      content: [
+        {
+          type: "paragraph",
+          text: "Special thanks to the original inspiration and the @CodeGrid[urlhttps://www.youtube.com/@codegrid] . Happy coding!",
+        },
+      ],
+    },
    ],
 };
