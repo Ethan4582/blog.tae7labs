@@ -141,7 +141,7 @@ export default async function LandingPageSlugPage({ params }: LandingPageProps) 
                         <h3 className="text-[14px] font-black uppercase tracking-widest text-muted-foreground/70">Categories</h3>
                         <div className="flex flex-wrap gap-2">
                            {pageData.categories.map((cat, idx) => (
-                              <a href={`/landing-pages#${group}`} key={idx} className="px-3 py-1.5 rounded-md bg-muted/40 border border-border/30 text-[13px] font-semibold tracking-wide text-foreground/80 flex items-center gap-2 hover:bg-muted/60 transition-colors">
+                              <a href={`/templates#${group}`} key={idx} className="px-3 py-1.5 rounded-md bg-muted/40 border border-border/30 text-[13px] font-semibold tracking-wide text-foreground/80 flex items-center gap-2 hover:bg-muted/60 transition-colors">
                                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
                                  {cat}
                               </a>
@@ -166,7 +166,7 @@ export default async function LandingPageSlugPage({ params }: LandingPageProps) 
                <div className="pt-20 border-t border-border/10">
                   <div className="flex items-center justify-between mb-8 px-2">
                      <h2 className="text-2xl font-bold text-foreground font-sans">Related Templates</h2>
-                     <Link href="/landing-pages/gallery" className="text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1">
+                     <Link href="/templates/gallery" className="text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1">
                         See All <ArrowUpRight className="w-4 h-4" />
                      </Link>
                   </div>
@@ -175,7 +175,7 @@ export default async function LandingPageSlugPage({ params }: LandingPageProps) 
                      {relatedTemplates.map((template) => (
                         <Link
                            key={template.slug}
-                           href={`/landing-pages/${template.groupSlug}/${template.slug}`}
+                           href={`/templates/${template.groupSlug}/${template.slug}`}
                            className="group block space-y-4"
                         >
                            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border/10 bg-muted/20">

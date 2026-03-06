@@ -29,7 +29,7 @@ export default function LandingPageGallery() {
                               transition={{ duration: 0.4 }}
                               className="group flex flex-col"
                            >
-                              <Link href={`/landing-pages/${group.slug}/${page.slug}`}>
+                              <Link href={`/templates/${group.slug}/${page.slug}`}>
                                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 border border-border/10 bg-muted/20">
                                     <Image
                                        src={page.image}

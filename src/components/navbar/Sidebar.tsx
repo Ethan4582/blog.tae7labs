@@ -74,7 +74,7 @@ export default function Sidebar() {
 
                                     let href = `/blog/${group.slug}/${page.slug}`;
                                     if (isIntro) href = "/blog";
-                                    if (isLandingPage) href = "/landing-pages/gallery";
+                                    if (isLandingPage) href = "/templates/gallery";
 
                                     const isActive = pathname === href;
 

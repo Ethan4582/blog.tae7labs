@@ -25,7 +25,7 @@ export default function LandingPageSection() {
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                   className="group"
                >
-                  <Link href={`/landing-pages/${page.groupSlug}/${page.slug}`} className="cursor-pointer block">
+                  <Link href={`/templates/${page.groupSlug}/${page.slug}`} className="cursor-pointer block">
                      <div className="relative aspect-video rounded-2xl overflow-hidden mb-6 border border-border/5 bg-muted/20 transition-all duration-500 group-hover:border-primary/20 group-hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
                         <Image
                            src={page.image}

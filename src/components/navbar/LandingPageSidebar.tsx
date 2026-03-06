@@ -28,10 +28,10 @@ export default function LandingPageSidebar() {
          <nav className="py-5 px-4 font-sans">
             <div className="mb-4 space-y-1">
                <Link
-                  href="/landing-pages/gallery"
+                  href="/templates/gallery"
                   className={clsx(
                      "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[13px] tracking-wide transition-all duration-200 cursor-pointer group capitalize outline-none",
-                     pathname === "/landing-pages/gallery"
+                     pathname === "/templates/gallery"
                         ? "text-primary bg-primary/10 font-bold"
                         : "text-foreground/70 hover:text-foreground/90 hover:bg-muted/40 font-semibold"
                   )}
@@ -49,7 +49,7 @@ export default function LandingPageSidebar() {
                      className="mb-1"
                   >
                      <Link
-                        href={`/landing-pages#${group.slug}`}
+                        href={`/templates#${group.slug}`}
                         onClick={() => {
                            // Ensure it's open
                            if (!openGroups[group.slug]) {
@@ -94,8 +94,8 @@ export default function LandingPageSidebar() {
                            >
                               <div className="ml-2 mt-0.5 border-l border-border/20 pl-2">
                                  {group.pages.map((page) => {
-                                    const href = `/landing-pages/${group.slug}/${page.slug}`;
-                                    const isActive = pathname === href || pathname === `/landing-pages/${page.slug}`; // Fallback
+                                    const href = `/templates/${group.slug}/${page.slug}`;
+                                    const isActive = pathname === href || pathname === `/templates/${page.slug}`; // Fallback
 
                                     return (
                                        <Link
