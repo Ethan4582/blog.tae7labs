@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import BlogHero from "@/src/components/blog/BlogHero";
 import RecentTutorials from "@/src/components/blog/RecentTutorials";
+import LandingPageSection from "@/src/components/blog/LandingPageSection";
 import FeaturedProducts from "@/src/components/blog/FeaturedProducts";
 import TutorialList from "@/src/components/blog/TutorialList";
 
@@ -14,6 +15,7 @@ export default function BlogIndexPage() {
       <div className="flex-1 min-w-0 bg-background overflow-y-auto custom-scrollbar">
          <BlogHero />
          <RecentTutorials />
+         <LandingPageSection />
          <FeaturedProducts />
          <TutorialList />
       </div>

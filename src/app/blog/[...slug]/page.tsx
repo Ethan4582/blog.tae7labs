@@ -5,6 +5,8 @@ import { getTutorialData } from "@/src/lib/blogData";
 import PageContent from "@/src/components/PageContent";
 import TableOfContents from "@/src/components/TableOfContents";
 import BlogGallery from "@/src/components/blog/BlogGallery";
+import LandingPageGallery from "@/src/components/blog/LandingPageGallery";
+
 
 interface BlogPageProps {
    params: Promise<{ slug: string[] }>;
@@ -42,6 +44,10 @@ export default async function BlogSlugPage({ params }: BlogPageProps) {
 
    if (slug.join("/") === "getting-started/gallery") {
       return <BlogGallery />;
+   }
+
+   if (slug.join("/") === "getting-started/landing-page") {
+      return <LandingPageGallery />;
    }
 
    const result = findPageBySlug(slug);

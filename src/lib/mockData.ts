@@ -110,6 +110,12 @@ export const blogNavigation: ToggleGroup[] = [
             slug: "gallery",
             date: "Mar 3, 2026",
             sections: [],
+         },
+         {
+            title: "Landing Page",
+            slug: "landing-page",
+            date: "Mar 3, 2026",
+            sections: [],
          }
       ],
    },
