@@ -25,7 +25,20 @@ export default function LandingPageSidebar() {
 
    return (
       <aside className="hidden md:block w-[260px] min-w-[260px] h-[calc(100vh-65px)] sticky top-[65px] overflow-y-auto border-r border-border/40 bg-background/50 backdrop-blur-md custom-scrollbar">
-         <nav className="py-5 px-4">
+         <nav className="py-5 px-4 font-sans">
+            <div className="mb-4 space-y-1">
+               <Link
+                  href="/landing-pages/gallery"
+                  className={clsx(
+                     "w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-[13px] tracking-wide transition-all duration-200 cursor-pointer group capitalize outline-none",
+                     pathname === "/landing-pages/gallery"
+                        ? "text-primary bg-primary/10 font-bold"
+                        : "text-foreground/70 hover:text-foreground/90 hover:bg-muted/40 font-semibold"
+                  )}
+               >
+                  <span>Landing Page Gallery</span>
+               </Link>
+            </div>
             <div className="space-y-1">
                {landingPages.map((group, groupIndex) => (
                   <motion.div

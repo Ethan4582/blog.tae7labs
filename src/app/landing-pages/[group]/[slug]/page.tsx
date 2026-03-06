@@ -166,7 +166,7 @@ export default async function LandingPageSlugPage({ params }: LandingPageProps) 
                <div className="pt-20 border-t border-border/10">
                   <div className="flex items-center justify-between mb-8 px-2">
                      <h2 className="text-2xl font-bold text-foreground font-sans">Related Templates</h2>
-                     <Link href="/blog" className="text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1">
+                     <Link href="/landing-pages/gallery" className="text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1">
                         See All <ArrowUpRight className="w-4 h-4" />
                      </Link>
                   </div>

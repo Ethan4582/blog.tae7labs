@@ -70,7 +70,12 @@ export default function Sidebar() {
                               <div className="ml-2 mt-0.5 border-l border-border/20 pl-2">
                                  {group.pages.map((page: any) => {
                                     const isIntro = group.slug === "getting-started" && page.slug === "intro";
-                                    const href = isIntro ? "/blog" : `/blog/${group.slug}/${page.slug}`;
+                                    const isLandingPage = group.slug === "getting-started" && page.slug === "landing-page";
+
+                                    let href = `/blog/${group.slug}/${page.slug}`;
+                                    if (isIntro) href = "/blog";
+                                    if (isLandingPage) href = "/landing-pages/gallery";
+
                                     const isActive = pathname === href;
 
                                     return (

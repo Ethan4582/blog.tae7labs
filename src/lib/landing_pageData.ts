@@ -29,7 +29,7 @@ export interface LandingPageGroup {
 
 export const landingPages: LandingPageGroup[] = [
    {
-      title: "AI Templates",
+      title: "AI",
       slug: "ai",
       pages: [
          {
