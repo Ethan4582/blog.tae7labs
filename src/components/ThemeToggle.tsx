@@ -6,12 +6,12 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 
 export default function ThemeToggle() {
-   const [theme, setTheme] = useState<"light" | "dark">("dark");
+   const [theme, setTheme] = useState<"light" | "dark">("light");
 
    useEffect(() => {
-      // Check initial preference from localStorage or default to dark
+      // Check initial preference from localStorage or default to light
       const stored = localStorage.getItem("theme") as "light" | "dark" | null;
-      const initial = stored || "dark";
+      const initial = stored || "light";
       setTheme(initial);
       document.documentElement.classList.toggle("dark", initial === "dark");
    }, []);
