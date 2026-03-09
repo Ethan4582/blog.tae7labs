@@ -67,6 +67,18 @@ export const recentTutorials: Tutorial[] = [
       gif: assets.tutorials.loaderSplitCounter.gif,
       slug: "loader-split-counter"
    },
+   {
+      id: "3",
+      title: "Scroll Motion Gallery",
+      description: "A dynamic gallery where images rotate and move with scroll using GSAP ScrollTrigger, creating depth and motion. Hover interactions reveal video previews and metadata, enhanced with a subtle Framer Motion parallax effect. ✨",
+      galleryDescription: "Mesmerizing ripples interacting with typography for an organic feel.",
+      demoInstructions: "Move your mouse gently over the canvas to see the water ripple effect in action.",
+      date: "March 10, 2026",
+      tag: "SCROLL ANIMATION",
+      category: "scroll-animation",
+      image: assets.tutorials.scrollGallery.image,
+      slug: "scroll-motion-gallery"
+   },
 ];
 
 export const featuredProducts: Product[] = [

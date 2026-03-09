@@ -1,16 +1,16 @@
 import type { PostContent } from "../../types";
 import { assets } from "../../asset_data";
 
-
 export const scrollGalleryData:PostContent = {
   author: "SinghAshir65848",
   date: "March 10, 2026",
   difficulty: "Short",
   introduction:
     "A dynamic gallery where images rotate and move with scroll using GSAP ScrollTrigger, creating depth and motion. Hover interactions reveal video previews and metadata, enhanced with a subtle Framer Motion parallax effect. ✨",
-  liveDemo: "https://example.com/demo",
-  sourceCode: "https://github.com/yourname/scroll-gallery",
- gif: assets.tutorials.waterRipple.gif,
+  liveDemo: "https://t7labs-demo.pages.dev/gallery/scroll-motion-gallery",
+  sourceCode: "https://github.com/Ethan4582/demo-t7labs/tree/master/src/components/Scroll_Motion_Gallery",
+  image: assets.tutorials.scrollGallery.image,
+ 
   sections: [
     {
       id: "initializing-project",
@@ -23,7 +23,7 @@ export const scrollGalleryData:PostContent = {
         {
           type: "code",
           language: "bash",
-          code: "npx create-next-app@latest scroll-gallery\ncd scroll-gallery\nnpm install gsap framer-motion",
+          code: "npx create-next-app@latest scroll-gallery\ncd scroll-gallery\nnpm install gsap framer-motion lenis",
         },
         {
           type: "paragraph",
@@ -230,6 +230,79 @@ const scrollY = useTransform(smoothProgress, [0, 1], [12, -12]);
       ],
     },
     {
+      id: "adding-smooth-scroll",
+      title: "Adding smooth scrolling with Lenis",
+      content: [
+        {
+          type: "paragraph",
+          text: "To give the gallery a buttery‑smooth feel, we'll integrate Lenis, a lightweight smooth scroll engine. Create a provider component that initializes Lenis and wraps your application.",
+        },
+        {
+          type: "code",
+          name: "components/LenisProvider.tsx",
+          language: "tsx",
+          code: `"use client";
+import { useEffect, useRef, ReactNode } from "react";
+import Lenis from "lenis";
+
+export default function LenisProvider({ children }: { children: ReactNode }) {
+  const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    if (!lenisRef.current) {
+      lenisRef.current = new Lenis({ 
+        lerp: 0.1,        // Smoothness factor (0 = no smoothing, 1 = max)
+        smoothWheel: true  // Enable smooth mouse wheel scrolling
+      });
+
+      function raf(time: number) {
+        lenisRef.current?.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+    }
+
+    return () => {
+      if (lenisRef.current) {
+        lenisRef.current.destroy();
+        lenisRef.current = null;
+      }
+    };
+  }, []);
+
+  return <>{children}</>;
+}`,
+        },
+        {
+          type: "paragraph",
+          text: "Now wrap your root layout with this provider to enable smooth scrolling everywhere:",
+        },
+        {
+          type: "code",
+          name: "app/layout.tsx",
+          language: "tsx",
+          code: `import LenisProvider from '@/components/LenisProvider';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <LenisProvider>
+          {children}
+        </LenisProvider>
+      </body>
+    </html>
+  );
+}`,
+        },
+        {
+          type: "paragraph",
+          text: "GSAP ScrollTrigger works seamlessly with Lenis – no extra configuration needed. The scroll‑based animations will now be driven by Lenis's smooth scroll, creating a cohesive experience.",
+        },
+       
+      ],
+    },
+    {
       id: "using-the-component",
       title: "Using the component",
       content: [
@@ -251,11 +324,18 @@ export default function Home() {
   );
 }`,
         },
-        {
-          type: "paragraph",
-          text: "You can adjust the `CANVAS_HEIGHT_VH` constant to control how much scrolling space the gallery occupies. The rotation angles and positions can be fine‑tuned in `layoutData` to achieve the desired visual rhythm.",
-        },
+        
       ],
     },
+//     {
+//   id: "wrapping-up",
+//   title: "Wrapping Up",
+//   content: [
+//     {
+//       type: "paragraph",
+//       text: "This project draws visual and interaction inspiration from the creative studio @WeAreGeniusClub[urlhttps://wearegeniusclub.com/] whose site demonstrates a beautiful motion-driven gallery concept."
+//     },
+//   ],
+// }
   ],
 };

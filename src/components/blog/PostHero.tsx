@@ -53,8 +53,8 @@ export default function PostHero({ post, page }: PostHeroProps) {
                </span>
             )}
 
-           
-           
+
+
          </div>
 
          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-foreground mb-3 font-sans">
@@ -91,8 +91,8 @@ export default function PostHero({ post, page }: PostHeroProps) {
             )}
          </div>
 
-         {/* GIF / video */}
-         {(post.gif || post.videoDemo) && (
+         {/* Image / GIF / video */}
+         {(post.gif || post.videoDemo || post.image) && (
             <div className="mt-12 rounded-2xl overflow-hidden border border-border/40 bg-card/40 backdrop-blur-sm shadow-2xl aspect-video lg:max-w-4xl mx-auto w-full group relative">
                {post.gif ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -101,13 +101,19 @@ export default function PostHero({ post, page }: PostHeroProps) {
                      alt={`${page.title} autoplaying demo`}
                      className="w-full h-full object-cover"
                   />
-               ) : (
+               ) : post.videoDemo ? (
                   <iframe
                      src={post.videoDemo}
                      className="w-full h-full border-0"
                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                      allowFullScreen
                      title="Video Demo"
+                  />
+               ) : (
+                  <img
+                     src={post.image}
+                     alt={`${page.title} hero`}
+                     className="w-full h-full object-cover"
                   />
                )}
                <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/10 rounded-2xl" />

@@ -29,6 +29,7 @@ export interface PostContent {
    subtitle?: string;
    introduction?: string;
    liveDemo?: string;
+   image?: string;
    sourceCode?: string;
    videoDemo?: string;
    gif?: string;

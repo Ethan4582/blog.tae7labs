@@ -5,17 +5,17 @@ export const assets = {
       waterRipple: {
          image: "https://res.cloudinary.com/dbgee370f/image/upload/v1772525777/Screenshot_2026-03-03_124655_lgc6rs.png",
          gif: "https://res.cloudinary.com/dbgee370f/image/upload/v1772560969/water-ripple_comp_lxukvj.gif",
-         video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        
       },
       loaderSplitCounter: {
          image: "https://res.cloudinary.com/dbgee370f/image/upload/v1772610618/Screenshot_2026-03-04_131933_wkmqqm.png", // Placeholder
          gif: "https://res.cloudinary.com/dbgee370f/image/upload/v1772658902/split_loader_comp_qra2tg.gif", // Placeholder
-         video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        
       },
       scrollGallery: {
-         image: "https://res.cloudinary.com/dbgee370f/image/upload/v1772610618/Screenshot_2026-03-04_131933_wkmqqm.png", // Placeholder
-         gif: "https://res.cloudinary.com/dbgee370f/image/upload/v1772658902/split_loader_comp_qra2tg.gif", // Placeholder
-         video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+         image: "https://res.cloudinary.com/dbgee370f/image/upload/v1773086721/demp_scrool_Gallery_ilnemr.png", // Placeholder
+        
+         
       },
    },
    products: {
