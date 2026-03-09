@@ -1,4 +1,4 @@
-// ─── Media assets ────────────────────────────────────────────────────────────
+// ─── Update the main page list  ────────────────────────────────────────────────────────────
 
 export const assets = {
    tutorials: {
@@ -11,7 +11,12 @@ export const assets = {
          image: "https://res.cloudinary.com/dbgee370f/image/upload/v1772610618/Screenshot_2026-03-04_131933_wkmqqm.png", // Placeholder
          gif: "https://res.cloudinary.com/dbgee370f/image/upload/v1772658902/split_loader_comp_qra2tg.gif", // Placeholder
          video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      }
+      },
+      scrollGallery: {
+         image: "https://res.cloudinary.com/dbgee370f/image/upload/v1772610618/Screenshot_2026-03-04_131933_wkmqqm.png", // Placeholder
+         gif: "https://res.cloudinary.com/dbgee370f/image/upload/v1772658902/split_loader_comp_qra2tg.gif", // Placeholder
+         video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      },
    },
    products: {
       template: "/assets/building2.png",

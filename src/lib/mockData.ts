@@ -120,22 +120,6 @@ export const blogNavigation: ToggleGroup[] = [
       ],
    },
    {
-      title: "SHADER",
-      slug: "shader",
-      pages: [
-         {
-            title: "Water Ripple Hover Effect ",
-            slug: "water-ripple-hover-effect",
-            date: "March 3, 2026",
-            sections: [
-               { id: "initializing-project", title: "Initializing the project" },
-               { id: "root-layout", title: "Root Layout Configuration" },
-               { id: "ripple-component", title: "Ripple Effect Component & Shaders" },
-            ],
-         },
-      ],
-   },
-   {
       title: "PAGE REVEAL",
       slug: "page-reveal",
       pages: [
@@ -148,6 +132,40 @@ export const blogNavigation: ToggleGroup[] = [
                { id: "component-structure", title: "Component structure" },
                { id: "counter-digit-arrays", title: "Preparing the counter digits" },
                { id: "core-gsap-animations", title: "Core GSAP animations" },
+            ],
+         },
+      ],
+   },
+   {
+      title: "Scroll Animation",
+      slug: "scroll-animation",
+      pages: [
+         {
+            title: "Scroll Motion Gallery",
+            slug: "scroll-motion-gallery",
+            date: "March 10, 2026",
+            sections: [
+               { id: "initializing-project", title: "Initializing the project" },
+               { id: "component-structure", title: "Component structure" },
+               { id: "layout-and-asset-data", title: "Layout and asset data" },
+               { id: "core-animations", title: "Core animations" },
+               { id: "using-the-component", title: "Using the component" },
+            ],
+         },
+      ],
+   },
+   {
+      title: "Misc",
+      slug: "misc",
+      pages: [
+         {
+            title: "Water Ripple Hover Effect ",
+            slug: "water-ripple-hover-effect",
+            date: "March 3, 2026",
+            sections: [
+               { id: "initializing-project", title: "Initializing the project" },
+               { id: "root-layout", title: "Root Layout Configuration" },
+               { id: "ripple-component", title: "Ripple Effect Component & Shaders" },
             ],
          },
       ],
