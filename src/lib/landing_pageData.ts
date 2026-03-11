@@ -217,7 +217,38 @@ export const landingPages: LandingPageGroup[] = [
    sourceCodeUrl: "https://github.com/Ethan4582/Astra",
 
    hasPermission: true
-},{
+},
+{
+  title: "VibeHouse",
+  slug: "vibehouse",
+  date: "Mar 11, 2026",
+  description: "A scroll-powered, visual-first collage gallery template for showcasing creative projects and dynamic assets.",
+  image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
+
+  images: [
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe3.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe5.png",
+   
+  ],
+
+   author: "Ashirwad Singh",
+   creatorUrl: "https://x.com/SinghAshir65848",
+
+   frameworkName: "Awards",
+   frameworkUrl: "https://wearegeniusclub.com/",
+
+   twitterHandle: "@SinghAshir65848",
+   twitterUrl: "https://x.com/SinghAshir65848",
+
+   categories: ["Portfolio", "Agency"],
+   previewUrl: "https://vibe-house.vercel.app/",
+   sourceCodeUrl: "https://github.com/Ethan4582/vibehouse",
+
+  hasPermission: false
+},
+{
    title: "Portfolio",
    slug: "portfolio",
    date: "Aug 10, 2025",

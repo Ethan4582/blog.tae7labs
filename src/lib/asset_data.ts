@@ -14,8 +14,7 @@ export const assets = {
       },
       scrollGallery: {
          image: "https://res.cloudinary.com/dbgee370f/image/upload/v1773086721/demp_scrool_Gallery_ilnemr.png", // Placeholder
-        
-         
+         gif:"https://res.cloudinary.com/dbgee370f/image/upload/v1773207684/scroll_gallery_demo_compress_l2hnnt.gif",
       },
    },
    products: {

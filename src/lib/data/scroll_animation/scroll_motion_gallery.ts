@@ -10,7 +10,7 @@ export const scrollGalleryData:PostContent = {
   liveDemo: "https://t7labs-demo.pages.dev/gallery/scroll-motion-gallery",
   sourceCode: "https://github.com/Ethan4582/demo-t7labs/tree/master/src/components/Scroll_Motion_Gallery",
   image: assets.tutorials.scrollGallery.image,
- 
+ gif:assets.tutorials.scrollGallery.gif,
   sections: [
     {
       id: "initializing-project",
