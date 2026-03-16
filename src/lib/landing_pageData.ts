@@ -29,6 +29,159 @@ export interface LandingPageGroup {
 }
 
 export const landingPages: LandingPageGroup[] = [
+     {
+      title: "Portfolio/Agency",
+      slug: "Portfolio",
+      pages: [
+{
+  title: "VibeHouse",
+  slug: "vibehouse",
+  date: "Mar 11, 2026",
+  description: "A scroll-powered, visual-first collage gallery template for showcasing creative projects and dynamic assets.",
+  image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
+
+  images: [
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe3.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe.png",
+    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe5.png",
+   
+  ],
+
+   author: "Ashirwad Singh",
+   creatorUrl: "https://x.com/SinghAshir65848",
+
+   frameworkName: "Awards",
+   frameworkUrl: "https://wearegeniusclub.com/",
+
+   twitterHandle: "@SinghAshir65848",
+   twitterUrl: "https://x.com/SinghAshir65848",
+
+   categories: ["Portfolio", "Agency"],
+   previewUrl: "https://vibe-house.vercel.app/",
+   sourceCodeUrl: "https://github.com/Ethan4582/vibehouse",
+
+  hasPermission: false
+},
+         {
+            title: "Amber-Media",
+            slug: "amber-media",
+            date: "Aug 15, 2025",
+            description: "A cinematic studio website for showcasing film projects and creative work.",
+            image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber_hero.png",
+
+            images: [
+               "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber_hero.png",
+               'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(5).png',
+              'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(4).png',
+              'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(1).png',
+               'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(2).png'
+            ],
+            author: "Thaer Swailem",
+   creatorUrl: "https://x.com/ThaerSwailem",
+
+            frameworkName: "Framer",
+            frameworkUrl: "https://www.framer.com/marketplace/templates/amber/",
+
+            twitterHandle: "@ThaerSwailem",
+            twitterUrl: "https://x.com/ThaerSwailem",
+
+            categories: ["Agency", "AI" , "Portfolio"],
+            previewUrl: "https://amber-media.vercel.app/",
+            sourceCodeUrl: "https://github.com/Ethan4582",
+            hasPermission: true,
+         },
+         {
+   title: "BuilderSignal",
+   slug: "builder-signal",
+   date: "Jan 25, 2025",
+   description: "A premium personal brand template for founders building and sharing SaaS.",
+   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal1.png",
+
+   images: [
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal1.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal2.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal3.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal4.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal5.png",
+   ],
+
+   author: "Ashirwad Singh",
+   creatorUrl: "https://github.com/Ethan4582",
+
+   frameworkName: "Github",
+   frameworkUrl: "https://github.com/Ethan4582/BuilderSignal",
+
+   twitterHandle: "@SinghAshir65848",
+   twitterUrl: "https://x.com/SinghAshir65848",
+
+   categories: ["SaaS", "Minimal", "Personal Brand"],
+   previewUrl: "https://builder-signalhq.vercel.app/",
+   sourceCodeUrl: "https://github.com/Ethan4582/BuilderSignal",
+
+   hasPermission: true
+},
+         {
+   title: "Astra",
+   slug: "astra",
+   date: "Mar 02, 2026",
+   description: "A minimal Next.js agency portfolio template.",
+   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra1.png",
+
+   images: [
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra1.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra2.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra3.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra4.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra5.png"
+   ],
+
+   author: "Ashirwad Singh",
+   creatorUrl: "https://x.com/SinghAshir65848",
+
+   frameworkName: "Figma",
+   frameworkUrl: "https://github.com/Ethan4582/Astra",
+
+   twitterHandle: "@SinghAshir65848",
+   twitterUrl: "https://x.com/SinghAshir65848",
+
+   categories: ["Portfolio", "Agency"],
+   previewUrl: "https://ast-ra.vercel.app/",
+   sourceCodeUrl: "https://github.com/Ethan4582/Astra",
+
+   hasPermission: true
+},
+
+{
+   title: "Portfolio",
+   slug: "portfolio",
+   date: "Aug 10, 2025",
+   description: "Minimal portfolio template with GSAP and Framer Motion featuring smooth text reveal animations.",
+   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port1.png",
+
+   images: [
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port1.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port2.png",
+      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port3.png",
+   ],
+
+   author: "Ashirwad Singh",
+   creatorUrl: "https://x.com/SinghAshir65848",
+
+   frameworkName: "Github",
+   frameworkUrl: "https://github.com/Ethan4582/portfolio",
+
+   twitterHandle: "@SinghAshir65848",
+   twitterUrl: "https://x.com/SinghAshir65848",
+
+   categories: ["Portfolio"],
+   previewUrl: "https://portfolio-rose-iota-29.vercel.app/",
+   sourceCodeUrl: "https://github.com/Ethan4582/portfolio",
+
+   hasPermission: true
+}
+      ],
+   },
    {
       title: "AI",
       slug: "AI",
@@ -125,158 +278,6 @@ export const landingPages: LandingPageGroup[] = [
 }
       ],
    },
-   {
-      title: "Portfolio/Agency",
-      slug: "Portfolio",
-      pages: [
-
-         {
-            title: "Amber-Media",
-            slug: "amber-media",
-            date: "Aug 15, 2025",
-            description: "A cinematic studio website for showcasing film projects and creative work.",
-            image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber_hero.png",
-
-            images: [
-               "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber_hero.png",
-               'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(5).png',
-              'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(4).png',
-              'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(1).png',
-               'https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/amber/amber-5%20(2).png'
-            ],
-            author: "Thaer Swailem",
-   creatorUrl: "https://x.com/ThaerSwailem",
-
-            frameworkName: "Framer",
-            frameworkUrl: "https://www.framer.com/marketplace/templates/amber/",
-
-            twitterHandle: "@ThaerSwailem",
-            twitterUrl: "https://x.com/ThaerSwailem",
-
-            categories: ["Agency", "AI" , "Portfolio"],
-            previewUrl: "https://amber-media.vercel.app/",
-            sourceCodeUrl: "https://github.com/Ethan4582",
-            hasPermission: true,
-         },
-         {
-   title: "BuilderSignal",
-   slug: "builder-signal",
-   date: "Jan 25, 2025",
-   description: "A premium personal brand template for founders building and sharing SaaS.",
-   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal1.png",
-
-   images: [
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal1.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal2.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal3.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal4.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/builder_signal/builderSignal5.png",
-   ],
-
-   author: "Ashirwad Singh",
-   creatorUrl: "https://github.com/Ethan4582",
-
-   frameworkName: "Github",
-   frameworkUrl: "https://github.com/Ethan4582/BuilderSignal",
-
-   twitterHandle: "@SinghAshir65848",
-   twitterUrl: "https://x.com/SinghAshir65848",
-
-   categories: ["SaaS", "Minimal", "Personal Brand"],
-   previewUrl: "https://builder-signalhq.vercel.app/",
-   sourceCodeUrl: "https://github.com/Ethan4582/BuilderSignal",
-
-   hasPermission: true
-},
-         {
-   title: "Astra",
-   slug: "astra",
-   date: "Mar 02, 2026",
-   description: "A minimal Next.js agency portfolio template.",
-   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra1.png",
-
-   images: [
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra1.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra2.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra3.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra4.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/astra/Astra5.png"
-   ],
-
-   author: "Ashirwad Singh",
-   creatorUrl: "https://x.com/SinghAshir65848",
-
-   frameworkName: "Figma",
-   frameworkUrl: "https://github.com/Ethan4582/Astra",
-
-   twitterHandle: "@SinghAshir65848",
-   twitterUrl: "https://x.com/SinghAshir65848",
-
-   categories: ["Portfolio", "Agency"],
-   previewUrl: "https://ast-ra.vercel.app/",
-   sourceCodeUrl: "https://github.com/Ethan4582/Astra",
-
-   hasPermission: true
-},
-{
-  title: "VibeHouse",
-  slug: "vibehouse",
-  date: "Mar 11, 2026",
-  description: "A scroll-powered, visual-first collage gallery template for showcasing creative projects and dynamic assets.",
-  image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
-
-  images: [
-    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe2.png",
-    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe3.png",
-    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe.png",
-    "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/videhouse/vibe5.png",
-   
-  ],
-
-   author: "Ashirwad Singh",
-   creatorUrl: "https://x.com/SinghAshir65848",
-
-   frameworkName: "Awards",
-   frameworkUrl: "https://wearegeniusclub.com/",
-
-   twitterHandle: "@SinghAshir65848",
-   twitterUrl: "https://x.com/SinghAshir65848",
-
-   categories: ["Portfolio", "Agency"],
-   previewUrl: "https://vibe-house.vercel.app/",
-   sourceCodeUrl: "https://github.com/Ethan4582/vibehouse",
-
-  hasPermission: false
-},
-{
-   title: "Portfolio",
-   slug: "portfolio",
-   date: "Aug 10, 2025",
-   description: "Minimal portfolio template with GSAP and Framer Motion featuring smooth text reveal animations.",
-   image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port1.png",
-
-   images: [
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port1.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port2.png",
-      "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/portfolio_/port3.png",
-   ],
-
-   author: "Ashirwad Singh",
-   creatorUrl: "https://x.com/SinghAshir65848",
-
-   frameworkName: "Github",
-   frameworkUrl: "https://github.com/Ethan4582/portfolio",
-
-   twitterHandle: "@SinghAshir65848",
-   twitterUrl: "https://x.com/SinghAshir65848",
-
-   categories: ["Portfolio"],
-   previewUrl: "https://portfolio-rose-iota-29.vercel.app/",
-   sourceCodeUrl: "https://github.com/Ethan4582/portfolio",
-
-   hasPermission: true
-}
-      ],
-   },
+ 
    
 ];

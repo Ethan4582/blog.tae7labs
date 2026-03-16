@@ -43,6 +43,19 @@ export interface Tutorial {
 export const recentTutorials: Tutorial[] = [
    {
       id: "1",
+      title: "Infinite 3D Gallery",
+      description: "Tutorial rebuilding a water ripple hover effect that fluidly distorts text using Three.js, React, and GLSL shaders.",
+      galleryDescription: "Mesmerizing ripples interacting with typography for an organic feel.",
+      demoInstructions: "Move your mouse gently over the canvas to see the water ripple effect in action.",
+      date: "March 17, 2026",
+      tag: "SHADER",
+      category: "gsap",
+      image: assets.tutorials.infinite3DGallery.image,
+      gif: assets.tutorials.infinite3DGallery.gif,
+      slug: "infinite-3d-gallery"
+   },
+   {
+      id: "2",
       title: "Water Ripple Hover Effect",
       description: "Tutorial rebuilding a water ripple hover effect that fluidly distorts text using Three.js, React, and GLSL shaders.",
       galleryDescription: "Mesmerizing ripples interacting with typography for an organic feel.",
@@ -53,19 +66,6 @@ export const recentTutorials: Tutorial[] = [
       image: assets.tutorials.waterRipple.image,
       gif: assets.tutorials.waterRipple.gif,
       slug: "water-ripple-hover-effect"
-   },
-   {
-      id: "2",
-      title: "Loader Split Counter",
-      description: "Full-screen animated loading sequence with a rolling digit counter and expanding progress bars using GSAP.",
-      galleryDescription: "A high-end mechanical counter loading sequence for premium landing pages.",
-      demoInstructions: "Observe the counter roll to 100% while the bars fill up. The loader will automatically reveal the content.",
-      date: "March 5, 2026",
-      tag: "PAGE REVEAL",
-      category: "page-reveal",
-      image: assets.tutorials.loaderSplitCounter.image,
-      gif: assets.tutorials.loaderSplitCounter.gif,
-      slug: "loader-split-counter"
    },
    {
       id: "3",
@@ -103,6 +103,7 @@ export const allTutorials: Partial<Tutorial>[] = [
 ];
 
 export const blogNavigation: ToggleGroup[] = [
+
    {
       title: "Getting Started",
       slug: "getting-started",
@@ -129,6 +130,26 @@ export const blogNavigation: ToggleGroup[] = [
             date: "Mar 3, 2026",
             sections: [],
          }
+      ],
+   },
+   {
+      title: "GSAP/Three.js",
+      slug: "gsap",
+      pages: [
+         {
+            title: "Infinite 3D Gallery",
+            slug: "infinite-3d-gallery",
+            date: "March 17, 2026",
+            sections: [
+               { id: "initializing-project", title: "Initializing the project" },
+               { id: "component-structure", title: "Component structure & single-mesh philosophy" },
+               { id: "dual-texture-atlasing", title: "Dual texture atlasing" },
+               { id: "shader-magic", title: "Shader magic: curvature, hover & infinite grid" },
+               { id: "camera-controls", title: "Camera controls & momentum" },
+               { id: "performance-optimizations", title: "Performance optimizations" },
+               { id: "conclusion", title: "Conclusion" },
+            ],
+         },
       ],
    },
    {
@@ -179,9 +200,10 @@ export const blogNavigation: ToggleGroup[] = [
                { id: "root-layout", title: "Root Layout Configuration" },
                { id: "ripple-component", title: "Ripple Effect Component & Shaders" },
             ],
-         },
+         }, 
       ],
    },
+  
 ];
 
 export function findPageBySlug(slugPath: string[]): { group: ToggleGroup; page: PageItem } | null {

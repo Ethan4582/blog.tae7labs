@@ -10,10 +10,11 @@ import type { PostContent } from "../types";
 import { waterRippleData } from "./shader/water-ripple.data";
 import { loaderSplitCounterData } from "./page_reveal/loader_split_counter";
 import { scrollGalleryData } from "./scroll_animation/scroll_motion_gallery";
-
+import { infinite3DGalleryData } from "./gsap/infinite_3D_Gallery";
 export type { PostContent };
 
 export const tutorialsData: Record<string, PostContent> = {
+   "infinite-3d-gallery": infinite3DGalleryData,
    "scroll-motion-gallery": scrollGalleryData,
    "water-ripple-hover-effect": waterRippleData,
    "loader-split-counter": loaderSplitCounterData,
