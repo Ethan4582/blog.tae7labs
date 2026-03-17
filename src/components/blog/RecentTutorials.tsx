@@ -19,7 +19,7 @@ export default function RecentTutorials() {
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {recentTutorials.map((t, i) => (
+            {recentTutorials.slice(0, 3).map((t, i) => (
                <motion.div
                   key={t.id}
                   initial={{ opacity: 0, y: 15 }}

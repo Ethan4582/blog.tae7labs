@@ -58,23 +58,13 @@ export default function BlogGallery() {
                      >
                         <Link href={t.slug ? `/blog/${t.category.toLowerCase()}/${t.slug}` : "#"}>
                            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6 border border-border/10 bg-muted/20">
-                              {/* Static Image (default) */}
+                              {/* Static Image (now scales on hover) */}
                               <Image
                                  src={t.image}
                                  alt={t.title}
                                  fill
-                                 className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                               />
-                              {/* GIF / Video on Hover */}
-                              {t.gif && (
-                                 <Image
-                                    src={t.gif}
-                                    alt={`${t.title} animation`}
-                                    fill
-                                    className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                                    unoptimized
-                                 />
-                              )}
                            </div>
 
                            <div className="space-y-3">

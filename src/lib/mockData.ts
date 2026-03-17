@@ -79,7 +79,25 @@ export const recentTutorials: Tutorial[] = [
       image: assets.tutorials.scrollGallery.image,
       slug: "scroll-motion-gallery"
    },
+   {
+      id: "4",
+      title: "Loader Split Counter",
+      description: "Build a modern page-reveal loader with a split-counter effect and smooth layout transitions using GSAP and Framer Motion.",
+      galleryDescription: "A high-performance page reveal with a numeric counter splitting into place.",
+      demoInstructions: "Refresh the page to see the loader sequence trigger again.",
+      date: "March 5, 2026",
+      tag: "PAGE REVEAL",
+      category: "page-reveal",
+      image: assets.tutorials.loaderSplitCounter.image,
+      gif: assets.tutorials.loaderSplitCounter.gif,
+      slug: "loader-split-counter"
+   },
 ];
+
+
+
+
+
 
 export const featuredProducts: Product[] = [
    {

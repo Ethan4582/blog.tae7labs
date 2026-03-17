@@ -3,7 +3,7 @@
 export const assets = {
    tutorials: {
       infinite3DGallery: {
-         image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/main_T7_labs_agency/demo.png",
+         image: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/blog_demo/demo.png",
          gif: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/blog_demo/3d_gallery_demo%20_Compress.mp4",
         
       },
