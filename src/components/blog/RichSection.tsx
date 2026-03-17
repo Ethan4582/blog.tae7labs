@@ -28,9 +28,9 @@ function CheckIcon() {
 
 
 function parseLinks(text: string) {
-   const parts = text.split(/(@\w+\[url[^\]]+\])/g);
+   const parts = text.split(/(@[^\[]+\[url[^\]]+\])/g);
    return parts.map((part, i) => {
-      const match = part.match(/@(\w+)\[url([^\]]+)\]/);
+      const match = part.match(/@([^\[]+?)[\s]*\[url([^\]]+)\]/);
       if (match) {
          return (
             <a
@@ -38,9 +38,9 @@ function parseLinks(text: string) {
                href={match[2]}
                target="_blank"
                rel="noopener noreferrer"
-               className="text-blue-500 hover:text-blue-600 underline font-medium"
+               className="text-primary hover:text-primary/80 underline font-medium underline-offset-4"
             >
-               {match[1]}
+               {match[1].trim()}
             </a>
          );
       }
@@ -67,9 +67,9 @@ function CodeBlock({ block }: { block: ContentBlock }) {
    };
 
    return (
-      <div className="mt-8 mb-10 overflow-hidden rounded-xl border border-border/40 bg-[#f8f9fa] dark:bg-[#13151f] shadow-sm font-sans mx-auto max-w-full">
+      <div className="mt-8 mb-10 overflow-hidden rounded-xl border border-border/40 bg-card shadow-sm font-sans mx-auto max-w-full">
          {/* Header — always visible so copy button is always there */}
-         <div className="flex items-center gap-1 border-b border-border/30 bg-[#f1f3f5] dark:bg-[#1a1d2e] px-2 pt-2 overflow-x-auto overflow-y-hidden custom-scrollbar">
+         <div className="flex items-center gap-1 border-b border-border/30 bg-muted px-2 pt-2 overflow-x-auto overflow-y-hidden custom-scrollbar">
             {hasTabs ? (
                block.tabs!.map((tab, idx) => (
                   <button
@@ -78,7 +78,7 @@ function CodeBlock({ block }: { block: ContentBlock }) {
                      className={clsx(
                         "px-4 py-2 text-sm transition-colors rounded-t-lg font-mono relative",
                         activeTab === idx
-                           ? "text-primary bg-[#f8f9fa] dark:bg-[#13151f]"
+                           ? "text-primary bg-card"
                            : "text-muted-foreground hover:text-foreground"
                      )}
                   >
@@ -86,13 +86,13 @@ function CodeBlock({ block }: { block: ContentBlock }) {
                      {activeTab === idx && (
                         <motion.div
                            layoutId="activeTabIndicator"
-                           className="absolute top-0 left-0 right-0 h-0.5 bg-blue-500 rounded-t-lg"
+                           className="absolute top-0 left-0 right-0 h-0.5 bg-primary rounded-t-lg shadow-[0_-2px_8px_rgba(59,130,246,0.3)]"
                         />
                      )}
                   </button>
                ))
             ) : block.name ? (
-               <div className="px-4 py-2 text-sm font-mono text-muted-foreground bg-[#f8f9fa] dark:bg-[#13151f] rounded-t-lg border-t-2 border-transparent">
+               <div className="px-4 py-2 text-sm font-mono text-muted-foreground bg-card rounded-t-lg border-t-2 border-transparent">
                   {block.name}
                </div>
             ) : (
@@ -107,7 +107,7 @@ function CodeBlock({ block }: { block: ContentBlock }) {
                className={clsx(
                   "ml-auto px-3 py-1.5 mb-1.5 flex items-center gap-1.5 text-xs font-medium rounded-md transition-all duration-200",
                   copied
-                     ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10"
+                     ? "text-green-600 dark:text-green-400 bg-green-500/10"
                      : "text-muted-foreground/50 hover:text-foreground hover:bg-border/20"
                )}
             >
@@ -115,7 +115,7 @@ function CodeBlock({ block }: { block: ContentBlock }) {
             </button>
          </div>
 
-         <div className="p-4 px-5 text-[13px] font-mono leading-relaxed overflow-x-auto custom-scrollbar">
+         <div className="p-4 px-5 text-[13px] font-mono leading-relaxed overflow-auto max-h-[500px] custom-scrollbar">
             <pre className="text-foreground/80 break-words whitespace-pre-wrap">
                {content}
             </pre>
@@ -145,10 +145,10 @@ export function RichSection({ content }: { content: ContentBlock[] }) {
 
             if (block.type === "list") {
                return (
-                  <div key={idx} className="bg-[#f8f9fa] dark:bg-[#13151f] border border-border/40 rounded-xl p-6 my-8 space-y-4">
+                  <div key={idx} className="bg-card border border-border/40 rounded-xl p-6 my-8 space-y-4">
                      {block.items?.map((item, i) => (
                         <div key={i} className="flex items-start gap-3">
-                           <ArrowRight className="w-4 h-4 text-blue-500 mt-1 shrink-0" />
+                           <ArrowRight className="w-4 h-4 text-primary mt-1 shrink-0" />
                            <p className="text-foreground/80 leading-relaxed text-[15px]">{item}</p>
                         </div>
                      ))}

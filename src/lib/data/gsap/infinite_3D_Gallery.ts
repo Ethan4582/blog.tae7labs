@@ -1,17 +1,17 @@
 import type { PostContent } from "../../types";
-import { assets } from "../../asset_data";
 
 
-
-export const infinite3DGalleryData: PostContent = {
+export const infinite3DGalleryData : PostContent = {
   author: "SinghAshir65848",
   date: "March 17, 2026",
   difficulty: "Advanced",
   introduction:
-    "A tutorial on building an infinite 3D gallery using Three.js and custom GLSL shaders. The gallery renders hundreds of project cards on a single plane with cinematic curvature, hover effects, and momentum-based navigation.",
-   liveDemo: "https://t7labs-demo.pages.dev/gallery/infinite-atlas-gallery",
+    "Build a high-performance 3D portfolio gallery using Three.js ,GSAP and GLSL shaders. Supports infinite scrolling, smooth navigation, and interactive hover effects.",
+  
+  liveDemo: "https://t7labs-demo.pages.dev/gallery/infinite-atlas-gallery",
   sourceCode: "https://github.com/Ethan4582/demo-t7labs/tree/master/src/components/Infinite_Atlas_Gallery",
-   gif: assets.tutorials.waterRipple.gif,
+  notes: "Full component code is not included—this post provides an overview only.\nIf you face any issues, refer to the working source code provided.",
+ videoDemo: "https://pub-4b0a8f18a97e4b44914872dd0d22870b.r2.dev/blog_demo/3d_gallery_demo%20_Compress.mp4",
   sections: [
     {
       id: "initializing-project",
@@ -19,16 +19,23 @@ export const infinite3DGalleryData: PostContent = {
       content: [
         {
           type: "paragraph",
-          text: "Create a new Next.js project and install the required dependencies:",
+          text: "Start by creating a new Next.js application with TypeScript and install the required dependencies:",
         },
         {
           type: "code",
           language: "bash",
-          code: "npx create-next-app@latest 3d-gallery\ncd 3d-gallery\nnpm install three gsap",
+          code: "npx create-next-app@latest infinite-gallery --typescript\ncd infinite-gallery\nnpm install three\nnpm install -D sass",
         },
+        
+      ],
+    },
+    {
+      id: "component-structure",
+      title: "Component structure",
+      content: [
         {
           type: "paragraph",
-          text: "We'll use TypeScript for type safety. The project structure will be:",
+          text: "The gallery is organised into a clean folder structure separating logic, data, shaders, and UI:",
         },
         {
           type: "code",
@@ -37,29 +44,387 @@ export const infinite3DGalleryData: PostContent = {
   Infinite_Atlas_Gallery/
     index.tsx
     style.module.scss
-    Controls.tsx (optional)
+    Controls.tsx
+    shadder.ts          (vertex/fragment shaders)
     scripts/
-      core.ts
-      engine.ts
-      utils.ts
+      core.ts          (types & state)
+      engine.ts        (Three.js setup, event loop, interactions)
+      utils.ts         (texture atlas generation, helpers)
     data/
-      asset_data.ts
-    shaders/
-      index.ts (vertex/fragment)`,
+      asset_data.ts    (project list)`,
         },
       ],
     },
     {
-      id: "component-structure",
-      title: "Main component and styles",
+      id: "asset-data",
+      title: "Defining project data",
       content: [
         {
           type: "paragraph",
-          text: "The main component initializes the Three.js engine inside a useEffect and provides controls for curvature and zoom.",
+          text: "Each project contains an image URL, title, year, tags, and a background colour for fallback. We'll use placeholder images from picsum:",
         },
         {
           type: "code",
-          name: "components/Infinite_Atlas_Gallery/index.tsx",
+          name: "data/asset_data.ts",
+          language: "ts",
+          code: `export interface Project {
+  title: string;
+  image: string;
+  year: number;
+  Tags: string[];
+  href: string;
+  slug: string;
+  bgColor: string;
+}
+
+export const projects: Project[] = [
+  {
+    title: "Motion Study",
+    image: "https://picsum.photos/id/1015/900/1200",
+    year: 2024,
+    Tags: ["EXPERIENCE", "PHYSICAL", "MOTION"],
+    href: "/projects/motion-study",
+    slug: "motion-study",
+    bgColor: "#2a2a2a",
+  },
+  // ... add more projects as needed
+];`,
+        },
+      ],
+    },
+    {
+      id: "core-state-and-config",
+      title: "Core state & configuration",
+      content: [
+        {
+          type: "paragraph",
+          text: "We define a central state object and configuration that will be shared across the engine. The `state` holds references to Three.js objects, drag flags, offsets, and animation parameters.",
+        },
+        {
+          type: "code",
+          name: "scripts/core.ts",
+          language: "ts",
+          code: `import * as THREE from "three";
+
+export interface Config {
+  cellSize: number;
+  zoomLevel: number;
+  lerpFactor: number;
+  borderColor: string;
+  backgroundColor: string;
+  textColor: string;
+  hoverColor: string;
+}
+
+export interface GalleryState {
+  scene?: THREE.Scene;
+  camera?: THREE.OrthographicCamera;
+  renderer?: THREE.WebGLRenderer;
+  plane?: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
+  isDragging: boolean;
+  isClick: boolean;
+  clickStartTime: number;
+  previousMouse: { x: number; y: number };
+  offset: { x: number; y: number };
+  targetOffset: { x: number; y: number };
+  mousePosition: { x: number; y: number };
+  zoomLevel: number;
+  targetZoom: number;
+  curvatureLevel: number;
+  targetCurvature: number;
+  baseCurvature: number;
+  textTextures: THREE.CanvasTexture[];
+  animationFrameId: number;
+  isFlattened: boolean;
+}
+
+export const config: Config = {
+  cellSize: 0.75,
+  zoomLevel: 1.25,
+  lerpFactor: 0.075,
+  borderColor: "rgba(255, 255, 255, 0.15)",
+  backgroundColor: "rgba(0, 0, 0, 1)",
+  textColor: "rgba(128, 128, 128, 1)",
+  hoverColor: "rgba(255, 255, 255, 0)",
+};
+
+export const state: GalleryState = {
+  isDragging: false,
+  isClick: true,
+  clickStartTime: 0,
+  previousMouse: { x: 0, y: 0 },
+  offset: { x: 0, y: 0 },
+  targetOffset: { x: 0, y: 0 },
+  mousePosition: { x: -1, y: -1 },
+  zoomLevel: 1.0,
+  targetZoom: 1.0,
+  curvatureLevel: 0.14,
+  targetCurvature: 0.14,
+  baseCurvature: 0.14,
+  textTextures: [],
+  animationFrameId: 0,
+  isFlattened: false,
+};
+
+export const DRAG_CURVATURE = 0.20;
+export const FLATTENED_DRAG_CURVATURE = 0.08;
+export const CELL_TEX_SIZE = 1024;`,
+        },
+      ],
+    },
+    {
+      id: "engine-initialization",
+      title: "Engine initialization & interaction",
+      content: [
+        {
+          type: "paragraph",
+          text: "The `engine.ts` file sets up the Three.js scene, loads textures, creates the shader material, and handles drag events. It also contains the animation loop that lerps all values. Below are the key parts; the full code is available in the provided source repository.",
+        },
+        {
+          type: "code",
+          name: "scripts/engine.ts (init function)",
+          language: "ts",
+          code: `import * as THREE from "three";
+import { state, config, DRAG_CURVATURE } from "./core";
+import { projects } from "../data/asset_data";
+import { vertexShader, fragmentShader } from "../shader";
+import { rgbaToArray, loadTextures, createTextureAtlas } from "./utils";
+
+export const init = async () => {
+  const container = document.getElementById("gallery");
+  if (!container || container.querySelector("canvas")) return;
+
+  // Setup scene, camera, renderer
+  state.scene = new THREE.Scene();
+  state.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  state.camera.position.z = 1;
+
+  state.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  state.renderer.setSize(container.offsetWidth, container.offsetHeight);
+  state.renderer.setPixelRatio(window.devicePixelRatio);
+  const bgColor = rgbaToArray(config.backgroundColor);
+  state.renderer.setClearColor(new THREE.Color(bgColor[0], bgColor[1], bgColor[2]), bgColor[3]);
+  container.appendChild(state.renderer.domElement);
+
+  // Load textures and create atlases
+  const imageTextures = await loadTextures(state.textTextures);
+  const imageAtlas = createTextureAtlas(imageTextures, false);
+  const textAtlas = createTextureAtlas(state.textTextures, true);
+
+  // Setup shader uniforms
+  const uniforms = {
+    uOffset: { value: new THREE.Vector2(0, 0) },
+    uResolution: { value: new THREE.Vector2(container.offsetWidth, container.offsetHeight) },
+    uBorderColor: { value: new THREE.Vector4(...rgbaToArray(config.borderColor)) },
+    uBackgroundColor: { value: new THREE.Vector4(...rgbaToArray(config.backgroundColor)) },
+    uMousePos: { value: new THREE.Vector2(-1, -1) },
+    uZoom: { value: 1.0 },
+    uCurvature: { value: state.curvatureLevel },
+    uCellSize: { value: config.cellSize },
+    uTextureCount: { value: projects.length },
+    uImageAtlas: { value: imageAtlas },
+    uTextAtlas: { value: textAtlas },
+  };
+
+  // Create plane with shader material
+  state.plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms })
+  );
+  state.scene.add(state.plane);
+
+  setupEventListeners();
+  animate();
+};`,
+        },
+        {
+          type: "code",
+          name: "scripts/engine.ts (animate loop)",
+          language: "ts",
+          code: `export const animate = () => {
+  state.animationFrameId = requestAnimationFrame(animate);
+  
+  // Lerp all values
+  state.offset.x += (state.targetOffset.x - state.offset.x) * config.lerpFactor;
+  state.offset.y += (state.targetOffset.y - state.offset.y) * config.lerpFactor;
+  state.zoomLevel += (state.targetZoom - state.zoomLevel) * config.lerpFactor;
+  state.curvatureLevel += (state.targetCurvature - state.curvatureLevel) * config.lerpFactor;
+
+  // Update shader uniforms
+  if (state.plane?.material.uniforms) {
+    state.plane.material.uniforms.uOffset.value.set(state.offset.x, state.offset.y);
+    state.plane.material.uniforms.uZoom.value = state.zoomLevel;
+    state.plane.material.uniforms.uCurvature.value = state.curvatureLevel;
+  }
+
+  if (state.renderer && state.scene && state.camera) {
+    state.renderer.render(state.scene, state.camera);
+  }
+};`,
+        },
+      ],
+    },
+    {
+      id: "texture-atlas-utils",
+      title: "Texture atlas generation",
+      content: [
+        {
+          type: "paragraph",
+          text: "To avoid the browser's texture limit, we combine all project images and text overlays into two large atlases. The `createTextureAtlas` function draws each image into a grid on a single canvas. The text atlas is generated by rendering the project metadata onto a canvas using the Canvas API. Below are the core functions; full code is in the source.",
+        },
+        {
+          type: "code",
+          name: "scripts/utils.ts (createTextTexture)",
+          language: "ts",
+          code: `export const createTextTexture = (project: Project): THREE.CanvasTexture => {
+  const S = CELL_TEX_SIZE;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = S;
+  const ctx = canvas.getContext("2d")!;
+  ctx.clearRect(0, 0, S, S);
+
+  // Draw title (right-aligned, top)
+  ctx.font = \`500 36px "IBM Plex Mono", monospace\`;
+  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.textAlign = "right";
+  ctx.fillText(project.title.toUpperCase(), S - 28, 28);
+
+  // Draw tags as pills at bottom-left
+  if (project.Tags && project.Tags.length > 0) {
+    // ... tag drawing logic
+  }
+
+  // Draw year at bottom-right
+  ctx.font = \`500 30px "IBM Plex Mono", monospace\`;
+  ctx.fillStyle = "rgba(255,255,255,0.95)";
+  ctx.textAlign = "right";
+  ctx.fillText(project.year.toString(), S - 28, S - 28);
+
+  return new THREE.CanvasTexture(canvas);
+};`,
+        },
+        {
+          type: "code",
+          name: "scripts/utils.ts (createTextureAtlas)",
+          language: "ts",
+          code: `export const createTextureAtlas = (
+  textures: THREE.Texture[],
+  isText = false
+): THREE.CanvasTexture => {
+  const atlasSize = Math.ceil(Math.sqrt(textures.length));
+  const textureSize = isText ? CELL_TEX_SIZE : 512;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = atlasSize * textureSize;
+  const ctx = canvas.getContext("2d")!;
+
+  // Fill canvas with black if image atlas (optional)
+  if (!isText) {
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // Draw each texture into its grid cell
+  for (let slot = 0; slot < atlasSize * atlasSize; slot++) {
+    const texture = textures[slot % textures.length];
+    if (!texture?.image) continue;
+    const x = (slot % atlasSize) * textureSize;
+    const y = Math.floor(slot / atlasSize) * textureSize;
+    ctx.drawImage(texture.image, x, y, textureSize, textureSize);
+  }
+
+  return new THREE.CanvasTexture(canvas);
+};`,
+        },
+      ],
+    },
+    {
+      id: "shader-implementation",
+      title: "Custom GLSL shaders",
+      content: [
+        {
+          type: "paragraph",
+          text: "All visual magic happens in the fragment shader. It computes the infinite grid, curvature distortion, cell hashing, hover blur, and blends the image and text atlases. Due to its length, only the key parts are shown here; the complete shader is available in the source repository.",
+        },
+        {
+          type: "code",
+          name: "shader.ts (fragment shader excerpt)",
+          language: "glsl",
+          code: `export const fragmentShader = \`
+  uniform vec2  uOffset;
+  uniform vec2  uResolution;
+  uniform vec4  uBorderColor;
+  uniform float uZoom;
+  uniform float uCurvature;
+  uniform float uCellSize;
+  uniform float uTextureCount;
+  uniform sampler2D uImageAtlas;
+  uniform sampler2D uTextAtlas;
+  varying vec2 vUv;
+
+  // IQ-style hash function for pseudo‑random cell selection
+  float cellHash(vec2 p) {
+    p = fract(p * vec2(0.1031, 0.1030));
+    p += dot(p, p.yx + 33.33);
+    return fract((p.x + p.y) * p.x);
+  }
+
+  // 9-tap Gaussian blur (used for hover effect)
+  vec3 blurAtlas(vec2 uv, float r) {
+    vec3 c  = texture2D(uImageAtlas, uv).rgb * 4.0;
+    c += texture2D(uImageAtlas, uv + vec2( r, 0.)).rgb * 2.0;
+    c += texture2D(uImageAtlas, uv + vec2(-r, 0.)).rgb * 2.0;
+    c += texture2D(uImageAtlas, uv + vec2(0.,  r)).rgb * 2.0;
+    c += texture2D(uImageAtlas, uv + vec2(0., -r)).rgb * 2.0;
+    c += texture2D(uImageAtlas, uv + vec2( r,  r)).rgb;
+    c += texture2D(uImageAtlas, uv + vec2(-r,  r)).rgb;
+    c += texture2D(uImageAtlas, uv + vec2( r, -r)).rgb;
+    c += texture2D(uImageAtlas, uv + vec2(-r, -r)).rgb;
+    return c / 16.0;
+  }
+
+  void main() {
+    // Apply curvature distortion to screen coordinates
+    vec2 screenUV = (vUv - 0.5) * 2.0;
+    float radius = length(screenUV);
+    float distortion = 1.1 - uCurvature * radius * radius;
+    vec2 worldCoord = screenUV * distortion * vec2(uResolution.x/uResolution.y, 1.0);
+    worldCoord = worldCoord * uZoom + uOffset;
+
+    // Determine which cell we're in
+    vec2 cellPos = worldCoord / uCellSize;
+    vec2 cellId  = floor(cellPos);
+    vec2 cellUV  = fract(cellPos);
+
+    // Hash cell ID to pick a texture from the atlas
+    float atlasSize = ceil(sqrt(uTextureCount));
+    float totalSlots = atlasSize * atlasSize;
+    float texIndex = floor(cellHash(cellId) * totalSlots);
+    texIndex = mod(texIndex, totalSlots);
+    vec2 atlasPos = vec2(mod(texIndex, atlasSize), floor(texIndex / atlasSize));
+
+    // ... rest of the shader: sample image atlas, apply hover blur, blend text atlas, etc.
+    // Full shader available in source code.
+    gl_FragColor = vec4(1.0); // placeholder
+  }
+\`;`,
+        },
+        {
+          type: "paragraph",
+          text: "The full shader includes logic for drawing the image card, applying a frosted‑glass blur on hover, overlaying the text atlas, and rendering grid borders. You can find it in the source repository linked above.",
+        },
+      ],
+    },
+    {
+      id: "main-component-and-controls",
+      title: "Main component & interactive controls",
+      content: [
+        {
+          type: "paragraph",
+          text: "The `index.tsx` component mounts the gallery and provides a simple UI panel to tweak curvature, zoom, and toggle flatten mode. The controls use `setConfig` to update the engine state.",
+        },
+        {
+          type: "code",
+          name: "Infinite_Atlas_Gallery/index.tsx",
           language: "tsx",
           code: `"use client";
 
@@ -118,7 +483,73 @@ export default function Infinite_Atlas_Gallery() {
         },
         {
           type: "code",
-          name: "components/Infinite_Atlas_Gallery/style.module.scss",
+          name: "Controls.tsx (simplified)",
+          language: "tsx",
+          code: `export const Controls = ({ 
+  curvature, zoom, isFlattened, 
+  onCurvatureChange, onZoomChange, onToggleFlatten 
+}) => {
+  return (
+    <div className="absolute bottom-6 left-6 z-50">
+      <div className="bg-black/40 backdrop-blur-2xl border border-white/10 rounded-xl p-4 w-52">
+        <h3 className="text-white/80 text-[10px] font-mono mb-4">VIEWPORT</h3>
+        <div className="space-y-4">
+          <div>
+            <div className="flex justify-between text-[9px] font-mono text-white/40">
+              <span>Curvature</span>
+              <span>{curvature.toFixed(2)}</span>
+            </div>
+            <input 
+              type="range" 
+              min="0" max="0.4" step="0.01" 
+              value={curvature}
+              onChange={(e) => onCurvatureChange(parseFloat(e.target.value))}
+              disabled={isFlattened}
+              className="w-full h-1 bg-white/10 rounded-lg accent-blue-500"
+            />
+          </div>
+          <div>
+            <div className="flex justify-between text-[9px] font-mono text-white/40">
+              <span>Zoom</span>
+              <span>{zoom.toFixed(2)}</span>
+            </div>
+            <input 
+              type="range" 
+              min="1" max="2.5" step="0.05" 
+              value={zoom}
+              onChange={(e) => onZoomChange(parseFloat(e.target.value))}
+              className="w-full h-1 bg-white/10 rounded-lg accent-blue-500"
+            />
+          </div>
+          <button 
+            onClick={onToggleFlatten}
+            className={\`w-full py-2 rounded-lg border transition-all text-[9.5px] font-mono uppercase \${
+              isFlattened 
+                ? "bg-white text-black border-white" 
+                : "bg-transparent text-white/80 border-white/20 hover:border-white/40"
+            }\`}
+          >
+            {isFlattened ? "RESTORE CURVE" : "FLATTEN VIEW"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};`,
+        },
+      ],
+    },
+    {
+      id: "styling",
+      title: "Styling",
+      content: [
+        {
+          type: "paragraph",
+          text: "The container takes full viewport and includes a subtle vignette overlay. The `dragging` class changes the cursor.",
+        },
+        {
+          type: "code",
+          name: "style.module.scss",
           language: "scss",
           code: `.container {
   position: relative;
@@ -146,567 +577,12 @@ export default function Infinite_Atlas_Gallery() {
       ],
     },
     {
-      id: "project-data",
-      title: "Project data",
-      content: [
-        {
-          type: "paragraph",
-          text: "Each project is defined by an image, title, year, tags, and a link. We'll store them in an array. The gallery automatically adapts to the number of projects.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/data/asset_data.ts",
-          language: "ts",
-          code: `export interface Project {
-  title: string;
-  image: string;
-  year: number;
-  Tags: string[];
-  href: string;
-  slug: string;
-  bgColor: string;
-}
-
-export const projects: Project[] = [
-  {
-    title: "Motion Study",
-    image: "https://picsum.photos/id/1015/900/1200",
-    year: 2024,
-    Tags: ["EXPERIENCE", "PHYSICAL", "MOTION"],
-    href: "/projects/motion-study",
-    slug: "motion-study",
-    bgColor: "#2a2a2a",
-  },
-  // Add more projects as needed
-];`,
-        },
-      ],
-    },
-    {
-      id: "shader-code",
-      title: "Shader code",
-      content: [
-        {
-          type: "paragraph",
-          text: "The vertex shader is a simple pass-through. The fragment shader contains all the logic: distortion, atlas lookup, hover blur, and compositing.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/shaders/index.ts",
-          language: "ts",
-          code: `export const vertexShader = \`
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-\`;
-
-export const fragmentShader = \`
-  uniform vec2  uOffset;
-  uniform vec2  uResolution;
-  uniform vec4  uBorderColor;
-  uniform vec4  uBackgroundColor;
-  uniform vec2  uMousePos;
-  uniform float uZoom;
-  uniform float uCurvature;
-  uniform float uCellSize;
-  uniform float uTextureCount;
-  uniform sampler2D uImageAtlas;
-  uniform sampler2D uTextAtlas;
-  varying vec2 vUv;
-
-  float cellHash(vec2 p) {
-    p = fract(p * vec2(0.1031, 0.1030));
-    p += dot(p, p.yx + 33.33);
-    return fract((p.x + p.y) * p.x);
-  }
-
-  vec3 blurAtlas(vec2 uv, float r) {
-    vec3 c  = texture2D(uImageAtlas, uv).rgb * 4.0;
-    c += texture2D(uImageAtlas, uv + vec2( r,  0.)).rgb * 2.0;
-    c += texture2D(uImageAtlas, uv + vec2(-r,  0.)).rgb * 2.0;
-    c += texture2D(uImageAtlas, uv + vec2( 0.,  r)).rgb * 2.0;
-    c += texture2D(uImageAtlas, uv + vec2( 0., -r)).rgb * 2.0;
-    c += texture2D(uImageAtlas, uv + vec2( r,  r)).rgb;
-    c += texture2D(uImageAtlas, uv + vec2(-r,  r)).rgb;
-    c += texture2D(uImageAtlas, uv + vec2( r, -r)).rgb;
-    c += texture2D(uImageAtlas, uv + vec2(-r, -r)).rgb;
-    return c / 16.0;
-  }
-
-  void main() {
-    vec2 screenUV = (vUv - 0.5) * 2.0;
-    float radius = length(screenUV);
-    
-    float distortion = 1.1;
-    if (uCurvature > 0.001) {
-      distortion -= uCurvature * radius * radius;
-    }
-    
-    vec2 worldCoord = screenUV * distortion * vec2(uResolution.x / uResolution.y, 1.0);
-    worldCoord = worldCoord * uZoom + uOffset;
-
-    vec2 cellPos = worldCoord / uCellSize;
-    vec2 cellId  = floor(cellPos);
-    vec2 cellUV  = fract(cellPos);
-
-    // Mouse hover detection
-    vec2 mUV = (uMousePos / uResolution) * 2.0 - 1.0;
-    mUV.y = -mUV.y;
-    float mRad = length(mUV);
-    float mDistort = 1.1;
-    if (uCurvature > 0.001) {
-      mDistort -= uCurvature * mRad * mRad;
-    }
-    vec2 mWorld = mUV * mDistort * vec2(uResolution.x / uResolution.y, 1.0);
-    mWorld = mWorld * uZoom + uOffset;
-    vec2 mouseCellId = floor(mWorld / uCellSize);
-
-    float cellDist = length((cellId + 0.5) - (mouseCellId + 0.5));
-    float hoverI   = (uMousePos.x >= 0.0) ? 1.0 - smoothstep(0.4, 0.7, cellDist) : 0.0;
-
-    // Atlas indexing
-    float atlasSize = ceil(sqrt(uTextureCount));
-    float totalSlots = atlasSize * atlasSize;
-    float texIndex  = floor(cellHash(cellId) * totalSlots);
-    texIndex = mod(clamp(texIndex, 0.0, totalSlots - 1.0), totalSlots);
-    vec2  atlasPos  = vec2(mod(texIndex, atlasSize), floor(texIndex / atlasSize));
-
-    // Image area (centered in cell)
-    float imageSize   = 0.62;
-    float imageBorder = (1.0 - imageSize) * 0.5;
-    vec2  imageUV     = (cellUV - imageBorder) / imageSize;
-    float edgeS       = 0.012;
-    vec2  imgMask     = smoothstep(-edgeS, edgeS, imageUV) * smoothstep(-edgeS, edgeS, 1.0 - imageUV);
-    float imageAlpha  = imgMask.x * imgMask.y;
-    bool  inImage     = imageUV.x >= 0.0 && imageUV.x <= 1.0 && imageUV.y >= 0.0 && imageUV.y <= 1.0;
-
-    // Layer 1: background
-    vec3 color = uBackgroundColor.rgb;
-
-    // Layer 2: hover frosted glass
-    if (hoverI > 0.0) {
-      vec2 bgUV = (cellUV - 0.5) / 1.8 + 0.5;
-      bgUV = clamp(bgUV, 0.0, 1.0);
-      vec2 bgAtlasUV = (atlasPos + bgUV) / atlasSize;
-      bgAtlasUV.y = 1.0 - bgAtlasUV.y;
-      vec3 blurred = blurAtlas(bgAtlasUV, 0.04 / atlasSize);
-      float luma = dot(blurred, vec3(0.299, 0.587, 0.114));
-      blurred = mix(blurred, vec3(luma), 0.35);
-      vec3 frostTint = vec3(0.55, 0.57, 0.60);
-      vec3 frosted = mix(blurred, frostTint, 0.30);
-      frosted *= 1.1;
-      color = mix(color, frosted, hoverI * 0.92);
-    }
-
-    // Layer 3: sharp image
-    if (inImage && imageAlpha > 0.0) {
-      vec2 sUV = (atlasPos + imageUV) / atlasSize;
-      sUV.y = 1.0 - sUV.y;
-      vec3 imgColor = texture2D(uImageAtlas, sUV).rgb;
-      float shadow = smoothstep(0.0, 0.06, imageUV.x) * smoothstep(0.0, 0.06, 1.0 - imageUV.x)
-                   * smoothstep(0.0, 0.06, imageUV.y) * smoothstep(0.0, 0.06, 1.0 - imageUV.y);
-      imgColor *= mix(0.75, 1.0, shadow);
-      color = mix(color, imgColor, imageAlpha);
-    }
-
-    // Layer 4: text overlay
-    vec2 overlayUV = (atlasPos + cellUV) / atlasSize;
-    overlayUV.y = 1.0 - overlayUV.y;
-    vec4 overlay = texture2D(uTextAtlas, overlayUV);
-    color = mix(color, overlay.rgb, overlay.a);
-
-    // Grid border
-    float lw = 0.006;
-    float gx = smoothstep(0.0, lw, cellUV.x) * smoothstep(0.0, lw, 1.0 - cellUV.x);
-    float gy = smoothstep(0.0, lw, cellUV.y) * smoothstep(0.0, lw, 1.0 - cellUV.y);
-    color = mix(color, uBorderColor.rgb, (1.0 - gx * gy) * uBorderColor.a);
-
-    // Vignette
-    float fade = 1.0 - smoothstep(0.4, 1.6, radius);
-    gl_FragColor = vec4(color * fade, 1.0);
-  }
-\`;`,
-        },
-      ],
-    },
-    {
-      id: "core-configuration",
-      title: "Core configuration and state",
-      content: [
-        {
-          type: "paragraph",
-          text: "The `core.ts` file defines the global configuration and reactive state used throughout the engine.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/scripts/core.ts",
-          language: "ts",
-          code: `import * as THREE from "three";
-
-export interface Config {
-  cellSize: number;
-  zoomLevel: number;
-  lerpFactor: number;
-  borderColor: string;
-  backgroundColor: string;
-  textColor: string;
-  hoverColor: string;
-}
-
-export interface GalleryState {
-  scene: THREE.Scene | undefined;
-  camera: THREE.OrthographicCamera | undefined;
-  renderer: THREE.WebGLRenderer | undefined;
-  plane: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial> | undefined;
-  isDragging: boolean;
-  isClick: boolean;
-  clickStartTime: number;
-  previousMouse: { x: number; y: number };
-  offset: { x: number; y: number };
-  targetOffset: { x: number; y: number };
-  mousePosition: { x: number; y: number };
-  zoomLevel: number;
-  targetZoom: number;
-  curvatureLevel: number;
-  targetCurvature: number;
-  baseCurvature: number;
-  textTextures: THREE.CanvasTexture[];
-  animationFrameId: number;
-  isFlattened: boolean;
-}
-
-export const config: Config = {
-  cellSize: 0.75,
-  zoomLevel: 1.25,
-  lerpFactor: 0.075,
-  borderColor: "rgba(255, 255, 255, 0.15)",
-  backgroundColor: "rgba(0, 0, 0, 1)",
-  textColor: "rgba(128, 128, 128, 1)",
-  hoverColor: "rgba(255, 255, 255, 0)",
-};
-
-export const state: GalleryState = {
-  scene: undefined,
-  camera: undefined,
-  renderer: undefined,
-  plane: undefined,
-  isDragging: false,
-  isClick: true,
-  clickStartTime: 0,
-  previousMouse: { x: 0, y: 0 },
-  offset: { x: 0, y: 0 },
-  targetOffset: { x: 0, y: 0 },
-  mousePosition: { x: -1, y: -1 },
-  zoomLevel: 1.0,
-  targetZoom: 1.0,
-  curvatureLevel: 0.14,
-  targetCurvature: 0.14,
-  baseCurvature: 0.14,
-  textTextures: [],
-  animationFrameId: 0,
-  isFlattened: false,
-};
-
-export const DRAG_CURVATURE = 0.20;
-export const FLATTENED_DRAG_CURVATURE = 0.08;
-export const CELL_TEX_SIZE = 1024;`,
-        },
-      ],
-    },
-    {
-      id: "engine-initialization",
-      title: "Engine initialization and animation loop",
-      content: [
-        {
-          type: "paragraph",
-          text: "The `engine.ts` file sets up the Three.js scene, camera, renderer, and shader material. It also starts the animation loop and handles resizing.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/scripts/engine.ts (setup part)",
-          language: "ts",
-          code: `import * as THREE from "three";
-import { state, config, DRAG_CURVATURE, FLATTENED_DRAG_CURVATURE } from "./core";
-import { projects } from "../data/asset_data";
-import { vertexShader, fragmentShader } from "../shaders";
-import { rgbaToArray, loadTextures, createTextureAtlas } from "./utils";
-
-export const init = async () => {
-  const container = document.getElementById("gallery");
-  if (!container || container.querySelector("canvas")) return;
-
-  state.scene = new THREE.Scene();
-  state.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-  state.camera.position.z = 1;
-
-  state.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-  state.renderer.setSize(container.offsetWidth, container.offsetHeight);
-  state.renderer.setPixelRatio(window.devicePixelRatio);
-  const bgColor = rgbaToArray(config.backgroundColor);
-  state.renderer.setClearColor(new THREE.Color(bgColor[0], bgColor[1], bgColor[2]), bgColor[3]);
-  container.appendChild(state.renderer.domElement);
-
-  const imageTextures = await loadTextures(state.textTextures);
-  const imageAtlas = createTextureAtlas(imageTextures, false);
-  const textAtlas = createTextureAtlas(state.textTextures, true);
-
-  const uniforms = {
-    uOffset: { value: new THREE.Vector2(0, 0) },
-    uResolution: { value: new THREE.Vector2(container.offsetWidth, container.offsetHeight) },
-    uBorderColor: { value: new THREE.Vector4(...rgbaToArray(config.borderColor)) },
-    uBackgroundColor: { value: new THREE.Vector4(...rgbaToArray(config.backgroundColor)) },
-    uMousePos: { value: new THREE.Vector2(-1, -1) },
-    uZoom: { value: 1.0 },
-    uCurvature: { value: state.curvatureLevel },
-    uCellSize: { value: config.cellSize },
-    uTextureCount: { value: projects.length },
-    uImageAtlas: { value: imageAtlas },
-    uTextAtlas: { value: textAtlas },
-  };
-
-  state.plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2),
-    new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms })
-  );
-  state.scene.add(state.plane);
-
-  setupEventListeners();
-  animate();
-};
-
-export const animate = () => {
-  state.animationFrameId = requestAnimationFrame(animate);
-  state.offset.x += (state.targetOffset.x - state.offset.x) * config.lerpFactor;
-  state.offset.y += (state.targetOffset.y - state.offset.y) * config.lerpFactor;
-  state.zoomLevel += (state.targetZoom - state.zoomLevel) * config.lerpFactor;
-  state.curvatureLevel += (state.targetCurvature - state.curvatureLevel) * config.lerpFactor;
-  if (state.plane?.material.uniforms) {
-    state.plane.material.uniforms.uOffset.value.set(state.offset.x, state.offset.y);
-    state.plane.material.uniforms.uZoom.value = state.zoomLevel;
-    state.plane.material.uniforms.uCurvature.value = state.curvatureLevel;
-  }
-  if (state.renderer && state.scene && state.camera) {
-    state.renderer.render(state.scene, state.camera);
-  }
-};
-
-export const cleanup = () => {
-  if (state.animationFrameId) cancelAnimationFrame(state.animationFrameId);
-  const container = document.getElementById("gallery");
-  if (container && state.renderer?.domElement) {
-    container.contains(state.renderer.domElement) && container.removeChild(state.renderer.domElement);
-  }
-  if (state.plane) {
-    state.plane.geometry.dispose();
-    Object.values(state.plane.material.uniforms).forEach((u: any) => {
-      if (u?.value instanceof THREE.Texture) u.value.dispose();
-    });
-    state.plane.material.dispose();
-  }
-  state.scene?.clear();
-  state.renderer?.dispose();
-  state.renderer?.forceContextLoss();
-  state.textTextures.forEach(t => t.dispose());
-  state.textTextures = [];
-  state.scene = undefined;
-  state.camera = undefined;
-  state.renderer = undefined;
-  state.plane = undefined;
-  state.isDragging = false;
-};
-
-export const setConfig = (u: { curvature?: number; zoom?: number; isFlattened?: boolean }) => {
-  if (u.curvature !== undefined) {
-    state.baseCurvature = u.curvature;
-    if (!state.isDragging) state.targetCurvature = u.curvature;
-  }
-  if (u.zoom !== undefined) {
-    config.zoomLevel = u.zoom;
-    if (!state.isDragging) state.targetZoom = u.isFlattened ? u.zoom * 0.96 : 1.0;
-  }
-  if (u.isFlattened !== undefined) {
-    state.isFlattened = u.isFlattened;
-    state.targetCurvature = u.isFlattened ? 0.0 : state.baseCurvature;
-    state.targetZoom = u.isFlattened ? config.zoomLevel * 0.96 : 1.0;
-  }
-};`,
-        },
-      ],
-    },
-    {
-      id: "interaction-logic",
-      title: "Interaction logic (drag, click, mouse move)",
-      content: [
-        {
-          type: "paragraph",
-          text: "Event listeners for mouse and touch are set up in `engine.ts`. Drag updates the target offset, creating momentum. A quick release with little movement is treated as a click, which maps screen coordinates back to a project and navigates.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/scripts/engine.ts (event handlers)",
-          language: "ts",
-          code: `const startDrag = (x: number, y: number) => {
-  state.isDragging = true;
-  state.isClick = true;
-  state.clickStartTime = Date.now();
-  const gallery = document.getElementById("gallery");
-  if (gallery) gallery.classList.add("dragging");
-  state.previousMouse = { x, y };
-  setTimeout(() => state.isDragging && (state.targetZoom = config.zoomLevel), 150);
-  state.targetCurvature = state.isFlattened ? FLATTENED_DRAG_CURVATURE : DRAG_CURVATURE;
-};
-
-const onPointerUp = (event: MouseEvent | TouchEvent) => {
-  state.isDragging = false;
-  const gallery = document.getElementById("gallery");
-  if (gallery) gallery.classList.remove("dragging");
-  state.targetZoom = state.isFlattened ? config.zoomLevel * 0.96 : 1.0;
-  state.targetCurvature = state.isFlattened ? 0.0 : state.baseCurvature;
-
-  if (state.isClick && Date.now() - state.clickStartTime < 200) {
-    const endX = 'clientX' in event ? (event as MouseEvent).clientX : (event as TouchEvent).changedTouches?.[0]?.clientX;
-    const endY = 'clientY' in event ? (event as MouseEvent).clientY : (event as TouchEvent).changedTouches?.[0]?.clientY;
-    if (endX !== undefined && endY !== undefined && state.renderer) {
-      const rect = state.renderer.domElement.getBoundingClientRect();
-      const screenX = ((endX - rect.left) / rect.width) * 2 - 1;
-      const screenY = -(((endY - rect.top) / rect.height) * 2 - 1);
-      const radius = Math.sqrt(screenX * screenX + screenY * screenY);
-      const distortion = 1.1 - state.curvatureLevel * radius * radius;
-      const worldX = screenX * distortion * (rect.width / rect.height) * state.zoomLevel + state.offset.x;
-      const worldY = screenY * distortion * state.zoomLevel + state.offset.y;
-      const cellX = Math.floor(worldX / config.cellSize);
-      const cellY = Math.floor(worldY / config.cellSize);
-
-      const atlasSize = Math.ceil(Math.sqrt(projects.length));
-      const totalSlots = atlasSize * atlasSize;
-      const hash = (p: {x: number, y: number}) => {
-        const dot = (Math.floor(p.x) * 12.9898 + Math.floor(p.y) * 78.233);
-        return (Math.sin(dot) * 43758.5453) % 1;
-      };
-      const texIndex = Math.floor(Math.abs(hash({x: cellX, y: cellY})) * totalSlots);
-      const actualIndex = (texIndex % projects.length + projects.length) % projects.length;
-      if (projects[actualIndex]?.href) window.location.href = projects[actualIndex].href;
-    }
-  }
-};
-
-const handleMove = (currentX: number, currentY: number) => {
-  if (!state.isDragging || currentX === undefined || currentY === undefined) return;
-  const deltaX = currentX - state.previousMouse.x;
-  const deltaY = currentY - state.previousMouse.y;
-  if (Math.abs(deltaX) > 2 || Math.abs(deltaY) > 2) {
-    state.isClick = false;
-    if (state.targetZoom === 1.0 || (state.isFlattened && state.targetZoom === config.zoomLevel * 0.96)) {
-      state.targetZoom = config.zoomLevel;
-    }
-  }
-  state.targetOffset.x -= deltaX * 0.003;
-  state.targetOffset.y += deltaY * 0.003;
-  state.previousMouse = { x: currentX, y: currentY };
-};
-
-// Setup listeners in setupEventListeners() ...`,
-        },
-      ],
-    },
-    {
-      id: "utility-functions",
-      title: "Utility functions",
-      content: [
-        {
-          type: "paragraph",
-          text: "The `utils.ts` file contains helpers for loading textures, creating atlases, and converting color strings to arrays.",
-        },
-        {
-          type: "code",
-          name: "components/Infinite_Atlas_Gallery/scripts/utils.ts",
-          language: "ts",
-          code: `import * as THREE from "three";
-import { projects } from "../data/asset_data";
-import { CELL_TEX_SIZE } from "./core";
-
-export const rgbaToArray = (rgba: string): [number, number, number, number] => {
-  const match = rgba.match(/[\\d.]+/g);
-  if (!match) return [0, 0, 0, 1];
-  const [r, g, b, a] = match.map(Number);
-  return [r / 255, g / 255, b / 255, a ?? 1];
-};
-
-export const loadTextures = async (textTextures: THREE.CanvasTexture[]) => {
-  const promises = projects.map((p, index) => {
-    return new Promise<THREE.Texture>((resolve) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = p.image;
-      img.onload = () => {
-        const tex = new THREE.Texture(img);
-        tex.needsUpdate = true;
-        resolve(tex);
-      };
-    });
-  });
-  const imageTextures = await Promise.all(promises);
-
-  // Generate text textures (simplified – you would draw actual text)
-  projects.forEach((p, i) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = CELL_TEX_SIZE;
-    const ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = 'white';
-    ctx.font = 'bold 40px sans-serif';
-    ctx.fillText(p.title, 20, 100);
-    ctx.fillText(p.year.toString(), 20, 200);
-    p.Tags.forEach((tag, j) => {
-      ctx.fillText(tag, 20, 300 + j * 50);
-    });
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.needsUpdate = true;
-    textTextures.push(tex);
-  });
-
-  return imageTextures;
-};
-
-export const createTextureAtlas = (
-  textures: THREE.Texture[],
-  isText: boolean
-): THREE.CanvasTexture => {
-  const size = Math.ceil(Math.sqrt(textures.length)) * CELL_TEX_SIZE;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext('2d')!;
-
-  textures.forEach((tex, i) => {
-    const col = i % Math.ceil(Math.sqrt(textures.length));
-    const row = Math.floor(i / Math.ceil(Math.sqrt(textures.length)));
-    const x = col * CELL_TEX_SIZE;
-    const y = row * CELL_TEX_SIZE;
-
-    if (isText) {
-      ctx.drawImage(tex.image, x, y, CELL_TEX_SIZE, CELL_TEX_SIZE);
-    } else {
-      const img = tex.image as HTMLImageElement;
-      const scale = Math.min(CELL_TEX_SIZE / img.width, CELL_TEX_SIZE / img.height);
-      const w = img.width * scale;
-      const h = img.height * scale;
-      ctx.drawImage(img, x + (CELL_TEX_SIZE - w) / 2, y + (CELL_TEX_SIZE - h) / 2, w, h);
-    }
-  });
-
-  return new THREE.CanvasTexture(canvas);
-};`,
-        },
-      ],
-    },
-    {
       id: "using-the-component",
       title: "Using the component",
       content: [
         {
           type: "paragraph",
-          text: "Import the gallery component into any page. Make sure the container has the ID 'gallery' (the component adds it automatically).",
+          text: "Import the gallery into any page. Make sure to wrap the component in a client directive if using Next.js App Router.",
         },
         {
           type: "code",
@@ -722,11 +598,20 @@ export default function Home() {
   );
 }`,
         },
-        {
-          type: "paragraph",
-          text: "You can adjust the number of projects in `asset_data.ts` – the gallery automatically adapts. The curvature, zoom, and flatten toggle can be controlled via the `Controls` component (you can build your own UI or omit it).",
-        },
+        
       ],
     },
+    {
+      id: "wrapping-up",
+      title: "Wrapping Up",
+      content: [
+        {
+          type: "paragraph",
+           text: "Credits to the original inspiration @Phantom.studio [urlhttps://www.phantom.land/] . Happy coding!",
+        }
+      ],
+    },
+    
   ],
+  
 };

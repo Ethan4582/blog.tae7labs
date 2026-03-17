@@ -47,8 +47,8 @@ export default function PostHero({ post, page }: PostHeroProps) {
             <span className="text-border">/</span>
 
             {post.difficulty && (
-               <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20">
+                  <span className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                   {post.difficulty}
                </span>
             )}
@@ -74,7 +74,7 @@ export default function PostHero({ post, page }: PostHeroProps) {
                   href={post.liveDemo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-4 py-2 bg-blue-50/50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg text-sm font-semibold transition hover:bg-blue-100/50 dark:hover:bg-blue-500/20"
+                  className="flex items-center gap-1 px-4 py-2 bg-primary/10 text-primary dark:text-primary dark:bg-primary/20 rounded-lg text-sm font-semibold transition hover:bg-primary/20 dark:hover:bg-primary/30"
                >
                   Live Demo <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                </a>
@@ -84,13 +84,12 @@ export default function PostHero({ post, page }: PostHeroProps) {
                   href={post.sourceCode}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-4 py-2 bg-blue-50/50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg text-sm font-semibold transition hover:bg-blue-100/50 dark:hover:bg-blue-500/20"
+                  className="flex items-center gap-1 px-4 py-2 bg-primary/10 text-primary dark:text-primary dark:bg-primary/20 rounded-lg text-sm font-semibold transition hover:bg-primary/20 dark:hover:bg-primary/30"
                >
                   Source code <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
                </a>
             )}
          </div>
-
          {/* Image / GIF / video */}
          {(post.gif || post.videoDemo || post.image) && (
             <div className="mt-12 rounded-2xl overflow-hidden border border-border/40 bg-card/40 backdrop-blur-sm shadow-2xl aspect-video lg:max-w-4xl mx-auto w-full group relative">
@@ -102,14 +101,26 @@ export default function PostHero({ post, page }: PostHeroProps) {
                      className="w-full h-full object-cover"
                   />
                ) : post.videoDemo ? (
-                  <iframe
-                     src={post.videoDemo}
-                     className="w-full h-full border-0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                     allowFullScreen
-                     title="Video Demo"
-                  />
-               ) : (
+                   post.videoDemo.endsWith(".mp4") ? (
+                      <video
+                         src={post.videoDemo}
+                         className="w-full h-full object-cover"
+                         autoPlay
+                         muted
+                         loop
+                         playsInline
+                         controls
+                      />
+                   ) : (
+                      <iframe
+                         src={post.videoDemo}
+                         className="w-full h-full border-0"
+                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                         allowFullScreen
+                         title="Video Demo"
+                      />
+                   )
+                ) : (
                   <img
                      src={post.image}
                      alt={`${page.title} hero`}
@@ -117,6 +128,20 @@ export default function PostHero({ post, page }: PostHeroProps) {
                   />
                )}
                <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/10 rounded-2xl" />
+            </div>
+         )}
+
+         {/* Notes / Highlights (Now below the media) */}
+         {post.notes && (
+            <div className="mt-12 px-5 py-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-start gap-4 backdrop-blur-sm">
+               <div className="mt-0.5 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+               </div>
+               <p className="text-[15px] text-foreground/80 leading-relaxed font-medium">
+                  {post.notes}
+               </p>
             </div>
          )}
       </motion.div>

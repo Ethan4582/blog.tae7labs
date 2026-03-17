@@ -5,12 +5,13 @@
  */
 
 export interface ContentBlock {
-   type: "paragraph" | "image" | "code" | "list" | "heading";
+   type: "paragraph" | "image" | "code" | "list" | "heading" ;
    text?: string;
    src?: string;
    alt?: string;
    language?: string;
    code?: string;
+   
    name?: string; // e.g., filename for single code block
    items?: string[];
    tabs?: { name: string; language: string; code: string }[]; // For multi-file code blocks
@@ -33,5 +34,6 @@ export interface PostContent {
    sourceCode?: string;
    videoDemo?: string;
    gif?: string;
+   notes?: string;
    sections: PostSection[];
 }

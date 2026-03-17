@@ -44,7 +44,7 @@ export const recentTutorials: Tutorial[] = [
    {
       id: "1",
       title: "Infinite 3D Gallery",
-      description: "Tutorial rebuilding a water ripple hover effect that fluidly distorts text using Three.js, React, and GLSL shaders.",
+      description: "Tutorial rebuilding a water ripple hover effect that fluidly distorts text using Three.js, GSAP, and GLSL shaders.",
       galleryDescription: "Mesmerizing ripples interacting with typography for an organic feel.",
       demoInstructions: "Move your mouse gently over the canvas to see the water ripple effect in action.",
       date: "March 17, 2026",
